@@ -3,6 +3,7 @@
     <?php
     $option_name = 'rtp_relic_account_details';
     $app_option_name = 'rtp_relic_browser_details';
+    global $current_user;
     /*$get_browser_curl = curl_init();
     curl_setopt_array( $get_browser_curl, array( CURLOPT_URL => 'https://staging-api.newrelic.com/v2/browser_applications.json?filter[ids]=73244',
 	CURLOPT_RETURNTRANSFER => 1,
@@ -43,7 +44,7 @@
     		    <tr>
     			<th scope="row"><label for="blogname">Email<span class="description"> (required)</span></label></th>
     			<td>
-    			    <input type="text" name="relic-account-email" id="relic-account-email" class="regular-text" >
+    			    <input type="text" name="relic-account-email" id="relic-account-email" class="regular-text" value="<?php echo $current_user->user_email ?>">
     			    <span id="relic-account-email_error" class="form_error"></span>
     			</td>
     		    </tr>
