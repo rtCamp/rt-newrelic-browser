@@ -10,8 +10,10 @@ jQuery( document ).ready( function( ) {
 
 		var selectedValue = jQuery( this ).val();
 		if ( 'no' == selectedValue ) {
+			jQuery( '#rtp-relic-get-browser' ).css( 'display', 'none' );
 			jQuery( '#rtp-relic-add-account' ).css( 'display', 'block' );
 		} else {
+			jQuery( '#rtp-relic-get-browser' ).css( 'display', 'block' );
 			jQuery( '#rtp-relic-add-account' ).css( 'display', 'none' );
 		}
 
@@ -22,8 +24,12 @@ jQuery( document ).ready( function( ) {
 		if ( !is_valid ) {
 			event.preventDefault();
 		}
-		else {
-
+	} );
+	
+	jQuery( "#rtp-relic-get-browser" ).submit( function() {
+		var is_valid = validate_form( "#rtp-relic-get-browser" );
+		if ( !is_valid ) {
+			event.preventDefault();
 		}
 	} );
 
@@ -32,7 +38,7 @@ jQuery( document ).ready( function( ) {
 		var valid = true;
 		for ( var i = 0; i < form_data.length; i++ ) {
 			var element = form_data[i];
-			if ( element.name == 'relic-account-name' || element.name == 'relic-account-email' || element.name == 'relic-first-name' || element.name == 'relic-last-name' ) {
+			if ( element.name == 'relic-account-name' || element.name == 'relic-account-email' || element.name == 'relic-first-name' || element.name == 'relic-last-name' || element.name == 'rtp-user-api-id' || element.name == 'rtp-user-api-key') {
 				if ( element.value == '' ) {
 					valid = false;
 					jQuery( formid + ' #' + element.name + "_error" ).text( 'Cannot be blank' );
@@ -46,7 +52,7 @@ jQuery( document ).ready( function( ) {
 					}
 				} else if ( element.name == 'relic-account-email' ) {
 					var email_valid_regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-					if ( !email_valid_regex.test(element.value) ) {
+					if ( !email_valid_regex.test( element.value ) ) {
 						jQuery( formid + ' #' + element.name + "_error" ).text( 'Not a valid email address.' );
 						jQuery( formid + ' #' + element.name + "_error" ).css( 'display', 'block' );
 					} else {

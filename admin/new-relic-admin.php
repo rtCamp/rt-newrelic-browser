@@ -3,19 +3,8 @@
     <?php
     $option_name = 'rtp_relic_account_details';
     $app_option_name = 'rtp_relic_browser_details';
+    $browser_app_list = 'rtp_relic_browser_list';
     global $current_user;
-    /*$get_browser_curl = curl_init();
-    curl_setopt_array( $get_browser_curl, array( CURLOPT_URL => 'https://staging-api.newrelic.com/v2/browser_applications.json?filter[ids]=73244',
-	CURLOPT_RETURNTRANSFER => 1,
-	CURLOPT_CUSTOMREQUEST => "GET",
-	CURLOPT_HTTPHEADER => array( 'x-api-key:f7ee61de49de0060c9cab987808248f48c4ad8965377273', 'Content-Type:application/json' ),
-    ) );
-    $resp = curl_exec( $get_browser_curl );
-    $decoded_data = json_decode( $resp );
-    foreach ( $decoded_data->browser_applications as $key => $value ) {
-	    print_r( $value->id );
-    }
-    curl_close( $get_browser_curl );*/
     if ( get_option( $option_name ) == false ) {
 	?>
         <h3>Do you have a New Relic account?</h3>
@@ -28,6 +17,31 @@
     	<label for="rtp-relic-no">No</label>
         </div>
         <div class="rtp-relic-form">
+    	<form id="rtp-relic-get-browser" action="options.php" method="POST" enctype="multipart/form-data">
+		<?php
+		settings_fields( 'relic_options_settings' );
+		?>
+    	    <table class="form-table">
+    		<tbody>
+    		    <tr>
+    			<th scope="row"><label for="rtp-user-api-key">Account API Key<span class="description"> (required)</span></label></th>
+    			<td>
+    			    <input type="text" name="rtp-user-api-key" id="rtp-user-api-key" class="regular-text">
+    			    <span id="rtp-user-api-key_error" class="form_error"></span>
+    			</td>
+    		    </tr>
+    		    <tr>
+    			<th scope="row"><label for="rtp-user-api-id">Account API ID<span class="description"> (required)</span></label></th>
+    			<td>
+    			    <input type="text" name="rtp-user-api-id" id="rtp-user-api-id" class="regular-text">
+    			    <span id="rtp-user-api-id_error" class="form_error"></span>
+    			</td>
+    		    </tr>
+    		</tbody></table>
+    	    <p class="submit">
+    		<input class="button-primary" type="submit" value="Submit" name="rtp-relic-get-browser-submit">
+    	    </p>
+    	</form>
     	<form id="rtp-relic-add-account" action="options.php" method="POST" enctype="multipart/form-data">
 		<?php
 		settings_fields( 'relic_options_settings' );
@@ -35,28 +49,28 @@
     	    <table class="form-table">
     		<tbody>
     		    <tr>
-    			<th scope="row"><label for="blogname">Account Name<span class="description"> (required)</span></label></th>
+    			<th scope="row"><label for="relic-account-name">Account Name<span class="description"> (required)</span></label></th>
     			<td>
     			    <input type="text" name="relic-account-name" id="relic-account-name" class="regular-text" value="<?php echo $_SERVER['SERVER_NAME']; ?>">
     			    <span id="relic-account-name_error" class="form_error"></span>
     			</td>
     		    </tr>
     		    <tr>
-    			<th scope="row"><label for="blogname">Email<span class="description"> (required)</span></label></th>
+    			<th scope="row"><label for="relic-account-email">Email<span class="description"> (required)</span></label></th>
     			<td>
     			    <input type="text" name="relic-account-email" id="relic-account-email" class="regular-text" value="<?php echo $current_user->user_email ?>">
     			    <span id="relic-account-email_error" class="form_error"></span>
     			</td>
     		    </tr>
     		    <tr>
-    			<th scope="row"><label for="blogname">First Name<span class="description"> (required)</span></label></th>
+    			<th scope="row"><label for="relic-first-name">First Name<span class="description"> (required)</span></label></th>
     			<td>
     			    <input type="text" name="relic-first-name" id="relic-first-name" class="regular-text">
     			    <span id="relic-first-name_error" class="form_error"></span>
     			</td>
     		    </tr>
     		    <tr>
-    			<th scope="row"><label for="blogname">Last Name<span class="description"> (required)</span></label></th>
+    			<th scope="row"><label for="relic-last-name">Last Name<span class="description"> (required)</span></label></th>
     			<td>
     			    <input type="text" name="relic-last-name" id="relic-last-name" class="regular-text">
     			    <span id="relic-last-name_error" class="form_error"></span>
@@ -70,7 +84,27 @@
         </div>
     <?php } else { ?>
 	<?php
-	if ( get_option( $option_name ) !== false ) {
+	/* If browser list is present show the list */
+	if ( get_option( $browser_app_list ) !== false && get_option( $app_option_name ) == false ) {
+	    $relic_browser_list = get_option( $browser_app_list );
+	    ?>
+	    <h3>Select Browser Application :</h3>
+	    <form id="rtp-relic-select-browser" action="options.php" method="POST" enctype="multipart/form-data">
+		<?php
+		settings_fields( 'relic_options_settings' );
+		foreach ( $relic_browser_list as $key => $relic_browser_data ) {
+		    ?>
+	    	<input type="radio" value="<?php echo $relic_browser_data['browser_id']; ?>" name="rtp-relic-browser-id" id="browser_<?php echo $relic_browser_data['browser_id']; ?>">
+	    	<label for="browser_<?php echo $relic_browser_data['browser_id']; ?>"><?php echo $relic_browser_data['browser_name']; ?></label><br>
+		    <?php
+		}
+		?>
+		<p class="submit">
+		    <input class="button-primary" type="submit" value="Select" name="rtp-relic-select-browser-submit">
+		</p>
+	    </form>
+	    <?php
+	} else if ( get_option( $option_name ) !== false && get_option( $app_option_name ) !== false ) {
 	    $relic_options_data = get_option( $option_name );
 	    $relic_browser_options_data = get_option( $app_option_name );
 	    ?>

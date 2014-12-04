@@ -21,13 +21,15 @@ function rtp_relic_option_page() {
 function rtp_relic_page_help() {
     $screen = get_current_screen();
 
+    /* add help tab on our page */
+
     $screen->add_help_tab( array(
 	'id' => 'rtp_relic_page_overview_tab',
 	'title' => __( 'Overview' ),
 	'content' => '<p>' . __( 'This page will allow you to integrate your New Relic Browser app with your website. 
 				If do not have New Relic account, then just select "No" and provide required details. The New Relic script will be loaded automatically in <head> tag of your site without any manual effort.
 				' ) . '</p>',
-				) );
+    ) );
 
     $screen->add_help_tab( array(
 	'id' => 'rtp_relic_page_about_tab',
@@ -51,18 +53,40 @@ function rtp_relic_load_js() {
  * @return array
  */
 function rtp_relic_validate_form( $relic_user_data ) {
+
     $relic_valid = TRUE;
     $relic_error_message = "";
 
-    if ( ( "" == $relic_user_data['relic-account-email']) || ( "" == $relic_user_data['relic-first-name']) || ( "" == $relic_user_data['relic-last-name']) || ( "" == $relic_user_data['relic-account-name']) ) {
-	$relic_valid = FALSE;
-	$relic_error_message = "All fields are required.";
-    } else if ( !filter_var( $relic_user_data['relic-account-email'], FILTER_VALIDATE_EMAIL ) ) {
-	$relic_valid = FALSE;
-	$relic_error_message = "Not a valid email address";
-    } else if ( (!preg_match( "/^[a-zA-Z ]*$/", $relic_user_data['relic-first-name'] )) || (!preg_match( "/^[a-zA-Z ]*$/", $relic_user_data['relic-last-name'] )) ) {
-	$relic_valid = FALSE;
-	$relic_error_message = "Name should contain letters only";
+    if ( isset( $relic_user_data['rtp-relic-get-browser-submit'] ) ) {
+
+	/* get browser list form */
+
+	if ( ( "" == $relic_user_data['rtp-user-api-key']) || ( "" == $relic_user_data['rtp-user-api-id']) ) {
+	    $relic_valid = FALSE;
+	    $relic_error_message = __( "All fields are required." );
+	}
+    } else if ( isset( $relic_user_data['rtp-relic-select-browser-submit'] ) ) {
+
+	/* select browser application form */
+
+	if ( !isset( $relic_user_data['rtp-relic-browser-id'] ) ) {
+	    $relic_valid = FALSE;
+	    $relic_error_message = __( "Select atleast one application." );
+	}
+    } else if ( isset( $relic_user_data['rtp-relic-form-submit'] ) ) {
+
+	/* add new user account form */
+
+	if ( ( "" == $relic_user_data['relic-account-email']) || ( "" == $relic_user_data['relic-first-name']) || ( "" == $relic_user_data['relic-last-name']) || ( "" == $relic_user_data['relic-account-name']) ) {
+	    $relic_valid = FALSE;
+	    $relic_error_message = __( "All fields are required." );
+	} else if ( !filter_var( $relic_user_data['relic-account-email'], FILTER_VALIDATE_EMAIL ) ) {
+	    $relic_valid = FALSE;
+	    $relic_error_message = __( "Not a valid email address" );
+	} else if ( (!preg_match( "/^[a-zA-Z ]*$/", $relic_user_data['relic-first-name'] )) || (!preg_match( "/^[a-zA-Z ]*$/", $relic_user_data['relic-last-name'] )) ) {
+	    $relic_valid = FALSE;
+	    $relic_error_message = __( "Name should contain letters only" );
+	}
     }
 
     $error_array = array(
@@ -73,6 +97,48 @@ function rtp_relic_validate_form( $relic_user_data ) {
     return $error_array;
 }
 
+/**
+ *  function to create a browser application
+ */
+
+function rtp_create_browser_app( $app_name, $account_api_key ) {
+    
+    /* send curl request */
+    
+    $app_data = array(
+	browser_application => array(
+	    "name" => $app_name
+	)
+    );
+    $app_dataString = json_encode( $app_data );
+    $app_curl = curl_init();
+    curl_setopt_array( $app_curl, array( CURLOPT_URL => 'https://staging-api.newrelic.com/v2/browser_applications.json',
+	CURLOPT_POST => 1,
+	CURLOPT_RETURNTRANSFER => 1,
+	CURLOPT_HTTPHEADER => array( 'x-api-key:' . $account_api_key, 'Content-Type:application/json' ),
+	CURLOPT_POSTFIELDS => $app_dataString
+    ) );
+
+    $app_response = curl_exec( $app_curl );
+    curl_close( $app_curl );
+    $app_json_data = json_decode( $app_response );
+
+    if ( empty( $app_json_data->browser_application->loader_script ) ) {
+	add_settings_error( 'relic_options', 'relic_options_error', $app_json_data->error->title );
+    } else {
+
+	/* stored the received browser application data */
+
+	$browser_details_array = array(
+	    'relic_app_name' => $app_json_data->browser_application->name,
+	    'relic_app_key' => $app_json_data->browser_application->browser_monitoring_key,
+	    'relic_app_id' => $app_json_data->browser_application->id,
+	    'relic_app_script' => $app_json_data->browser_application->loader_script
+	);
+	add_option( 'rtp_relic_browser_details', $browser_details_array );
+    }
+}
+
 function rtp_relic_options_validate( $input ) {
 
     /* validate form if js not worked */
@@ -80,78 +146,179 @@ function rtp_relic_options_validate( $input ) {
     $rtp_relic_form_validated = rtp_relic_validate_form( $_POST );
 
     if ( !$rtp_relic_form_validated['valid'] ) {
+
+	/* form not validated throw an error */
+
 	add_settings_error( 'relic_options', 'relic_options_error', $rtp_relic_form_validated['message'] );
     } else {
 
-	/* set password to new account */
-	$relic_password = wp_generate_password( 6 );
+	/* form validated go ahead */
+
 	$option_name = 'rtp_relic_account_details';
 	$app_option_name = 'rtp_relic_browser_details';
+	$browser_app_list_option = 'rtp_relic_browser_list';
 
-	/* if the account data is already stored then delete the account */
+	if ( isset( $_POST['rtp-relic-select-browser-submit'] ) ) {
 
-	if ( get_option( $option_name ) !== false ) {
-	    /* curl request to remove account */
-	    if ( isset( $_POST['rtp-relic-account-id'] ) ) {
-		$account_id = $_POST['rtp-relic-account-id'];
-		$delete_curl = curl_init();
-		curl_setopt_array( $delete_curl, array( CURLOPT_URL => 'https://staging.newrelic.com/api/v2/partners/191/accounts/' . $account_id,
-		    CURLOPT_CUSTOMREQUEST => "DELETE",
-		    CURLOPT_HTTPHEADER => array( 'x-api-key:0118286cc87aca4eef6723d567a94b3916167fc4cf91177', 'Content-Type:application/json' )
+	    /* user has selected the application so fetch the browser script */
+
+	    $rtp_account_details = get_option( $option_name );
+	    if ( isset( $_POST['rtp-relic-browser-id'] ) ) {
+
+		/* In this curl we are filtering browser applications by using browser id */
+
+		$get_browser_curl = curl_init();
+		curl_setopt_array( $get_browser_curl, array( CURLOPT_URL => 'https://staging-api.newrelic.com/v2/browser_applications.json?filter[ids]=' . $_POST['rtp-relic-browser-id'],
+		    CURLOPT_RETURNTRANSFER => 1,
+		    CURLOPT_CUSTOMREQUEST => "GET",
+		    CURLOPT_HTTPHEADER => array( 'x-api-key:' . $rtp_account_details['relic_api_key'], 'Content-Type:application/json' ),
 		) );
-		curl_exec( $delete_curl );
-		curl_close( $delete_curl );
+		$browser_list_response = curl_exec( $get_browser_curl );
+		$decoded_data = json_decode( $browser_list_response );
+		$browser_list = $decoded_data->browser_applications;
 
-		/* delete the stored data */
+		/* we have filtered the applications so go ahead and select the first application */
 
-		delete_option( $option_name );
-		delete_option( $app_option_name );
+		$browser_script = $browser_list[0]->loader_script;
+		curl_close( $get_browser_curl );
+
+		/* store the browser application details */
+
+		$browser_array = array(
+		    'relic_app_name' => $browser_list[0]->name,
+		    'relic_app_key' => $browser_list[0]->browser_monitoring_key,
+		    'relic_app_id' => $browser_list[0]->id,
+		    'relic_app_script' => $browser_list[0]->loader_script
+		);
+		add_option( $app_option_name, $browser_array );
+
+		/* browser details saved so delete the browsers list from meta */
+
+		delete_option( $browser_app_list_option );
+	    }
+	} else if ( isset( $_POST['rtp-relic-get-browser-submit'] ) ) {
+
+	    /* get the list of browser apps */
+
+	    $account_api_key = $_POST['rtp-user-api-key'];
+	    $account_api_id = $_POST['rtp-user-api-id'];
+	    $get_app_list_curl = curl_init();
+	    curl_setopt_array( $get_app_list_curl, array( CURLOPT_URL => 'https://staging-api.newrelic.com/v2/browser_applications.json',
+		CURLOPT_RETURNTRANSFER => 1,
+		CURLOPT_HTTPHEADER => array( 'x-api-key:' . $account_api_key, 'Content-Type:application/json' )
+	    ) );
+	    $list_response = curl_exec( $get_app_list_curl );
+	    curl_close( $get_app_list_curl );
+	    $browser_app_list = json_decode( $list_response );
+	    if ( !empty( $browser_app_list->browser_applications ) ) {
+		$browser_app_array = array();
+		foreach ( $browser_app_list->browser_applications as $key => $app_data ) {
+		    $app_data_array = array(
+			'browser_id' => $app_data->id,
+			'browser_name' => $app_data->name
+		    );
+		    array_push( $browser_app_array, $app_data_array );
+		}
+
+		/* store the browsers list */
+
+		add_option( 'rtp_relic_browser_list', $browser_app_array );
+
+		/* store the account details */
+
+		$main_array = array(
+		    'relic_api_key' => $account_api_key,
+		    'relic_id' => $account_api_id,
+		);
+		add_option( $option_name, $main_array );
+	    } else {
+
+		/* create a browser app as the account doesn't contain any app */
+
+		rtp_create_browser_app( $_SERVER['SERVER_NAME'], $account_api_key );
+
+
+		/* store the account details */
+
+		$account_details_array = array(
+		    'relic_api_key' => $account_api_key,
+		    'relic_id' => $account_api_id,
+		);
+		add_option( $option_name, $account_details_array );
 	    }
 	} else {
 
-	    /* always set allow_api_access to true while creating account
-	      start of API 1 */
+	    /* set password to new account */
 
-	    $data = array(
-		account => array(
-		    "name" => $_POST['relic-account-name'],
-		    "allow_api_access" => true,
-		    "users" => array(
-			array(
-			    "email" => $_POST['relic-account-email'],
-			    "password" => $relic_password,
-			    "first_name" => $_POST['relic-first-name'],
-			    "last_name" => $_POST['relic-last-name'],
-			    "role" => "admin",
-			    "owner" => "true"
-			)
-		    )
-		)
-	    );
+	    $relic_password = wp_generate_password( 6 );
 
-	    /* for this api data is to be pass in json */
+	    /* if the account data is already stored then delete the account */
 
-	    $dataString = json_encode( $data );
-	    $curl = curl_init();
-	    curl_setopt_array( $curl, array( CURLOPT_URL => 'https://staging.newrelic.com/api/v2/partners/191/accounts',
-		CURLOPT_POST => 1,
-		CURLOPT_RETURNTRANSFER => 1,
-		CURLOPT_HTTPHEADER => array( 'x-api-key:0118286cc87aca4eef6723d567a94b3916167fc4cf91177', 'Content-Type:application/json' ),
-		CURLOPT_POSTFIELDS => $dataString
-	    ) );
+	    if ( get_option( $option_name ) !== false ) {
 
-	    $response = curl_exec( $curl );
-	    curl_close( $curl );
-	    $json_data = json_decode( $response );
-	    if ( $json_data->error != '' ) {
-		add_settings_error( 'relic_options', 'relic_options_error', $json_data->error );
+		/* curl request to remove account */
+
+		if ( isset( $_POST['rtp-relic-account-id'] ) ) {
+		    $account_id = $_POST['rtp-relic-account-id'];
+		    $delete_curl = curl_init();
+		    curl_setopt_array( $delete_curl, array( CURLOPT_URL => 'https://staging.newrelic.com/api/v2/partners/191/accounts/' . $account_id,
+			CURLOPT_CUSTOMREQUEST => "DELETE",
+			CURLOPT_HTTPHEADER => array( 'x-api-key:0118286cc87aca4eef6723d567a94b3916167fc4cf91177', 'Content-Type:application/json' )
+		    ) );
+		    curl_exec( $delete_curl );
+		    curl_close( $delete_curl );
+
+		    /* delete the stored data */
+
+		    delete_option( $option_name );
+		    delete_option( $app_option_name );
+		}
 	    } else {
 
-		/* mail the details to user */
-		$relic_headers = "MIME-Version: 1.0\r\n";
-		$relic_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-		$relic_email_message = '<div style="font-size:15px;margin-top:20px;border:1px solid #6bffb2;border-radius:10px;padding:20px"><p>Your New Relic account details are given below :</p>
-	    <div style="font-size:15px;margin-top:20px;">
+		/* always set allow_api_access to true while creating account
+		  start of API 1 */
+
+		$data = array(
+		    account => array(
+			"name" => $_POST['relic-account-name'],
+			"allow_api_access" => true,
+			"users" => array(
+			    array(
+				"email" => $_POST['relic-account-email'],
+				"password" => $relic_password,
+				"first_name" => $_POST['relic-first-name'],
+				"last_name" => $_POST['relic-last-name'],
+				"role" => "admin",
+				"owner" => "true"
+			    )
+			)
+		    )
+		);
+
+		/* for this api data is to be pass in json */
+
+		$dataString = json_encode( $data );
+		$curl = curl_init();
+		curl_setopt_array( $curl, array( CURLOPT_URL => 'https://staging.newrelic.com/api/v2/partners/191/accounts',
+		    CURLOPT_POST => 1,
+		    CURLOPT_RETURNTRANSFER => 1,
+		    CURLOPT_HTTPHEADER => array( 'x-api-key:0118286cc87aca4eef6723d567a94b3916167fc4cf91177', 'Content-Type:application/json' ),
+		    CURLOPT_POSTFIELDS => $dataString
+		) );
+
+		$response = curl_exec( $curl );
+		curl_close( $curl );
+		$json_data = json_decode( $response );
+		if ( $json_data->error != '' ) {
+		    add_settings_error( 'relic_options', 'relic_options_error', $json_data->error );
+		} else {
+
+		    /* mail the account details to user */
+
+		    $relic_headers = "MIME-Version: 1.0\r\n";
+		    $relic_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+		    $relic_email_message = '<div style="font-size:15px;margin-top:20px;border:1px solid #6bffb2;border-radius:10px;padding:20px"><p>Your New Relic account details are given below :</p>
+				<div style="font-size:15px;margin-top:20px;">
 					<p style="margin:2px">
 						<span>Email : </span>
 						<span>' . $_POST['relic-account-email'] . '</span>
@@ -164,59 +331,27 @@ function rtp_relic_options_validate( $input ) {
 				<p style="margin-top:10px">
 					<a href="https://dev-login.newrelic.com/">Click here</a> to login to your New Relic account.
 				</p></div>';
-		wp_mail( $_POST['relic-account-email'], 'New Relic Details', $relic_email_message, $relic_headers );
+		    wp_mail( $_POST['relic-account-email'], 'New Relic Details', $relic_email_message, $relic_headers );
 
-		/* store the received data */
+		    /* store the received data */
 
-		$deprecated = null;
-		$autoload = 'no';
-		$main_array = array(
-		    'relic_account_name' => $json_data->name,
-		    'relic_api_key' => $json_data->api_key,
-		    'relic_id' => $json_data->id,
-		    'relic_password' => $relic_password
-		);
-		add_option( $option_name, $main_array, $deprecated, $autoload );
-
-		/* end of API 1
-		  Now create the browser app */
-
-		$app_data = array(
-		    browser_application => array(
-			"name" => $_POST['relic-account-name']
-		    )
-		);
-		$app_dataString = json_encode( $app_data );
-		$app_curl = curl_init();
-		curl_setopt_array( $app_curl, array( CURLOPT_URL => 'https://staging-api.newrelic.com/v2/browser_applications.json',
-		    CURLOPT_POST => 1,
-		    CURLOPT_RETURNTRANSFER => 1,
-		    CURLOPT_HTTPHEADER => array( 'x-api-key:' . $json_data->api_key, 'Content-Type:application/json' ),
-		    CURLOPT_POSTFIELDS => $app_dataString
-		) );
-
-		$app_response = curl_exec( $app_curl );
-		curl_close( $app_curl );
-		$app_json_data = json_decode( $app_response );
-		if ( empty( $app_json_data->browser_application->loader_script ) ) {
-		    add_settings_error( 'relic_options', 'relic_options_error', $app_json_data->error->title );
-		} else {
-
-		    /* stored the received data */
-
-		    $deprecated = null;
-		    $autoload = 'no';
 		    $main_array = array(
-			'relic_app_name' => $app_json_data->browser_application->name,
-			'relic_app_key' => $app_json_data->browser_application->browser_monitoring_key,
-			'relic_app_id' => $app_json_data->browser_application->id,
-			'relic_app_script' => $app_json_data->browser_application->loader_script
+			'relic_account_name' => $json_data->name,
+			'relic_api_key' => $json_data->api_key,
+			'relic_id' => $json_data->id,
+			'relic_password' => $relic_password
 		    );
-		    add_option( $app_option_name, $main_array, $deprecated, $autoload );
+		    add_option( $option_name, $main_array );
+
+		    /* end of API 1
+		      Now create the browser app */
+
+		    rtp_create_browser_app( $_POST['relic-account-name'], $json_data->api_key );
 		}
 	    }
 	}
     }
+
     return $input;
 }
 
