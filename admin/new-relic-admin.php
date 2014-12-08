@@ -65,14 +65,14 @@
     		    <tr>
     			<th scope="row"><label for="relic-first-name">First Name<span class="description"> (required)</span></label></th>
     			<td>
-    			    <input type="text" name="relic-first-name" id="relic-first-name" class="regular-text">
+    			    <input type="text" name="relic-first-name" id="relic-first-name" class="regular-text" value="<?php echo $current_user->user_firstname ?>">
     			    <span id="relic-first-name_error" class="form_error"></span>
     			</td>
     		    </tr>
     		    <tr>
     			<th scope="row"><label for="relic-last-name">Last Name<span class="description"> (required)</span></label></th>
     			<td>
-    			    <input type="text" name="relic-last-name" id="relic-last-name" class="regular-text">
+    			    <input type="text" name="relic-last-name" id="relic-last-name" class="regular-text" value="<?php echo $current_user->user_lastname ?>">
     			    <span id="relic-last-name_error" class="form_error"></span>
     			</td>
     		    </tr>
@@ -111,9 +111,9 @@
 	    <div class="rtp-relic-settings-page-details">
 		<h3>Account details:</h3>
 		<?php ?>
-		<p> <b>Account API Key</b> = <?php echo $relic_options_data['relic_api_key']; ?></p>	
+		<p> <b>Account API Key</b> = <?php echo $relic_options_data['relic_api_key']; ?></p>
 		<p> <b>Account API ID</b> = <?php echo $relic_options_data['relic_id']; ?></p>
-		<p> <b>Browser API Key</b> = <?php echo $relic_browser_options_data['relic_app_key']; ?></p>	
+		<p> <b>Browser API Key</b> = <?php echo $relic_browser_options_data['relic_app_key']; ?></p>
 		<p> <b>Browser API ID</b> = <?php echo $relic_browser_options_data['relic_app_id']; ?></p>
 	    </div>
 	    <form id="rtp-relic-remove-account" action="options.php" method="POST" enctype="multipart/form-data">
@@ -130,5 +130,3 @@
     }
     ?>
 </div>
-
-
