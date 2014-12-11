@@ -28,16 +28,22 @@ function rtp_relic_option_page() {
  */
 function rtp_relic_page_help() {
     $screen = get_current_screen();
-    $screen->add_help_tab(array(
-        'id' => 'rtp_relic_page_overview_tab',
-        'title' => __('Overview'),
-        'content' => '<p>' . __('This page will allow you to integrate your New Relic Browser app with your website. 
-                                If do not have New Relic account, then just select "No" and provide required details. The New Relic script will be loaded automatically in &lt;head&gt; tag of your site without any manual effort.') . '</p>', ));
-    $screen->add_help_tab(array(
-        'id' => 'rtp_relic_page_about_tab',
-        'title' => __('New Relic Browser'),
-        'content' => '<p>' . __('New Relic Browser provides deep visibility and actionable insights into real users experiences on your website. With standard page load timing (sometimes referred to as real user monitoring or RUM), New Relic measures the overall time to load the entire webpage. However, New Relic Browser goes beyond RUM to also help you monitor the performance of individual sessions, AJAX requests, and JavaScript errors—extending the monitoring throughout the entire life cycle of the page.') . '</p>',
-    ));
+    $screen->add_help_tab(
+            array(
+                'id' => 'rtp_relic_page_overview_tab',
+                'title' => __('Overview'),
+                'content' => '<p>' . __(
+                        'This page will allow you to integrate your New Relic Browser app with your website. 
+                     If do not have New Relic account, then just select "No" and provide required details. The New Relic script will be loaded automatically in &lt;head&gt; tag of your site without any manual effort.'
+                ) . '</p>', )
+    );
+    $screen->add_help_tab(
+            array(
+                'id' => 'rtp_relic_page_about_tab',
+                'title' => __('New Relic Browser'),
+                'content' => '<p>' . __('New Relic Browser provides deep visibility and actionable insights into real users experiences on your website. With standard page load timing (sometimes referred to as real user monitoring or RUM), New Relic measures the overall time to load the entire webpage. However, New Relic Browser goes beyond RUM to also help you monitor the performance of individual sessions, AJAX requests, and JavaScript errors—extending the monitoring throughout the entire life cycle of the page.') . '</p>',
+            )
+    );
 }
 
 /**
@@ -129,7 +135,8 @@ function rtp_create_browser_app($app_name, $account_api_key) {
         CURLOPT_RETURNTRANSFER => 1,
         CURLOPT_HTTPHEADER => array( 'x-api-key:' . $account_api_key, 'Content-Type:application/json' ),
         CURLOPT_POSTFIELDS => $app_dataString
-    ));
+            )
+    );
 
     $app_response = curl_exec($app_curl);
     curl_close($app_curl);
@@ -218,7 +225,8 @@ function rtp_relic_options_validate($input) {
             curl_setopt_array($get_app_list_curl, array( CURLOPT_URL => 'https://staging-api.newrelic.com/v2/browser_applications.json',
                 CURLOPT_RETURNTRANSFER => 1,
                 CURLOPT_HTTPHEADER => array( 'x-api-key:' . $account_api_key, 'Content-Type:application/json' )
-            ));
+                    )
+            );
             $list_response = curl_exec($get_app_list_curl);
             curl_close($get_app_list_curl);
             $browser_app_list = json_decode($list_response);
@@ -276,7 +284,8 @@ function rtp_relic_options_validate($input) {
                     curl_setopt_array($delete_curl, array( CURLOPT_URL => 'https://staging.newrelic.com/api/v2/partners/191/accounts/' . $account_id,
                         CURLOPT_CUSTOMREQUEST => "DELETE",
                         CURLOPT_HTTPHEADER => array( 'x-api-key:0118286cc87aca4eef6723d567a94b3916167fc4cf91177', 'Content-Type:application/json' )
-                    ));
+                            )
+                    );
                     curl_exec($delete_curl);
                     curl_close($delete_curl);
 
@@ -347,7 +356,8 @@ function rtp_relic_options_validate($input) {
                     CURLOPT_RETURNTRANSFER => 1,
                     CURLOPT_HTTPHEADER => array( 'x-api-key:0118286cc87aca4eef6723d567a94b3916167fc4cf91177', 'Content-Type:application/json' ),
                     CURLOPT_POSTFIELDS => $dataString
-                ));
+                        )
+                );
 
                 $response = curl_exec($curl);
                 curl_close($curl);
