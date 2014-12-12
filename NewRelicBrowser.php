@@ -81,7 +81,7 @@ function rtp_relic_validate_form($relic_user_data)
 
     if (isset($relic_user_data['rtp-relic-get-browser-submit'])) {
         /* get browser list form */
-        if (( "" == $relic_user_data['rtp-user-api-key']) || ( "" == $relic_user_data['rtp-user-api-id'])) {
+        if (( "" == $relic_user_data['rtp-user-api-key'])) {
             $relic_valid = false;
             $relic_error_message = __("All fields are required.");
         }
