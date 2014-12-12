@@ -213,7 +213,6 @@ function rtp_relic_options_validate($input)
         } else if (isset($_POST['rtp-relic-get-browser-submit'])) {
             /* get the list of browser apps */
             $account_api_key = $_POST['rtp-user-api-key'];
-            $account_api_id = $_POST['rtp-user-api-id'];
             $get_app_list_curl = curl_init();
             curl_setopt_array(
                 $get_app_list_curl,
@@ -244,7 +243,6 @@ function rtp_relic_options_validate($input)
 
                 $main_array = array(
                     'relic_api_key' => $account_api_key,
-                    'relic_id' => $account_api_id,
                 );
                 add_option($option_name, $main_array);
             } else {
@@ -255,7 +253,6 @@ function rtp_relic_options_validate($input)
 
                 $account_details_array = array(
                     'relic_api_key' => $account_api_key,
-                    'relic_id' => $account_api_id,
                 );
                 add_option($option_name, $account_details_array);
             }
