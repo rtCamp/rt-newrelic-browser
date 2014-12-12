@@ -32,16 +32,16 @@ function rtp_relic_page_help()
 {
     $screen = get_current_screen();
     $screen->add_help_tab(
-        array(
+            array(
                 'id' => 'rtp_relic_page_overview_tab',
                 'title' => __('Overview'),
                 'content' => '<p>' . __(
-                    'This page will allow you to integrate your New Relic Browser app with your website. 
+                        'This page will allow you to integrate your New Relic Browser app with your website. 
                      If do not have New Relic account, then just select "No" and provide required details. The New Relic script will be loaded automatically in &lt;head&gt; tag of your site without any manual effort.'
                 ) . '</p>', )
     );
     $screen->add_help_tab(
-        array(
+            array(
                 'id' => 'rtp_relic_page_about_tab',
                 'title' => __('New Relic Browser'),
                 'content' => '<p>' . __('New Relic Browser provides deep visibility and actionable insights into real users experiences on your website. With standard page load timing (sometimes referred to as real user monitoring or RUM), New Relic measures the overall time to load the entire webpage. However, New Relic Browser goes beyond RUM to also help you monitor the performance of individual sessions, AJAX requests, and JavaScript errors—extending the monitoring throughout the entire life cycle of the page.') . '</p>',
@@ -117,7 +117,7 @@ function rtp_relic_validate_form($relic_user_data)
  * Create a browser app
  * @param string $app_name name of the app
  * @param string $account_api_key api key of the account
- * @return null
+ * @return boolean
  */
 function rtp_create_browser_app($app_name, $account_api_key)
 {
@@ -132,8 +132,7 @@ function rtp_create_browser_app($app_name, $account_api_key)
     $app_dataString = json_encode($app_data);
     $app_curl = curl_init();
     curl_setopt_array(
-        $app_curl,
-        array(
+            $app_curl, array(
         CURLOPT_URL => 'https://staging-api.newrelic.com/v2/browser_applications.json',
         CURLOPT_POST => 1,
         CURLOPT_RETURNTRANSFER => 1,
@@ -148,6 +147,7 @@ function rtp_create_browser_app($app_name, $account_api_key)
 
     if (empty($app_json_data->browser_application->loader_script)) {
         add_settings_error('relic_options', 'relic_options_error', $app_json_data->error->title);
+        return false;
     } else {
         /* stored the received browser application data */
         $browser_details_array = array(
@@ -157,6 +157,7 @@ function rtp_create_browser_app($app_name, $account_api_key)
             'relic_app_script' => $app_json_data->browser_application->loader_script
         );
         add_option('rtp_relic_browser_details', $browser_details_array);
+        return true;
     }
 }
 
@@ -215,8 +216,7 @@ function rtp_relic_options_validate($input)
             $account_api_key = $_POST['rtp-user-api-key'];
             $get_app_list_curl = curl_init();
             curl_setopt_array(
-                $get_app_list_curl,
-                array(
+                    $get_app_list_curl, array(
                 CURLOPT_URL => 'https://staging-api.newrelic.com/v2/browser_applications.json',
                 CURLOPT_RETURNTRANSFER => 1,
                 CURLOPT_HTTPHEADER => array( 'x-api-key:' . $account_api_key, 'Content-Type:application/json' )
@@ -247,14 +247,15 @@ function rtp_relic_options_validate($input)
                 add_option($option_name, $main_array);
             } else {
                 /* create a browser app as the account doesn't contain any app */
-                rtp_create_browser_app($_SERVER['SERVER_NAME'], $account_api_key);
+                $browser_created = rtp_create_browser_app($_SERVER['SERVER_NAME'], $account_api_key);
 
                 /* store the account details */
-
-                $account_details_array = array(
-                    'relic_api_key' => $account_api_key,
-                );
-                add_option($option_name, $account_details_array);
+                if ($browser_created) {
+                    $account_details_array = array(
+                        'relic_api_key' => $account_api_key,
+                    );
+                    add_option($option_name, $account_details_array);
+                }
             }
         } else {
             /* set password to new account */
@@ -270,8 +271,7 @@ function rtp_relic_options_validate($input)
                     $account_id = $_POST['rtp-relic-account-id'];
                     $delete_curl = curl_init();
                     curl_setopt_array(
-                        $delete_curl,
-                        array(
+                            $delete_curl, array(
                         CURLOPT_URL => 'https://staging.newrelic.com/api/v2/partners/191/accounts/' . $account_id,
                         CURLOPT_CUSTOMREQUEST => "DELETE",
                         CURLOPT_HTTPHEADER => array( 'x-api-key:0118286cc87aca4eef6723d567a94b3916167fc4cf91177', 'Content-Type:application/json' )
@@ -341,8 +341,7 @@ function rtp_relic_options_validate($input)
                 $dataString = json_encode($data);
                 $curl = curl_init();
                 curl_setopt_array(
-                    $curl,
-                    array(
+                        $curl, array(
                     CURLOPT_URL => 'https://staging.newrelic.com/api/v2/partners/191/accounts',
                     CURLOPT_POST => 1,
                     CURLOPT_RETURNTRANSFER => 1,
