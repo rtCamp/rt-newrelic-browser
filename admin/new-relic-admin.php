@@ -27,14 +27,8 @@
                             <th scope="row"><label for="rtp-user-api-key">Account API Key<span class="description"> (required)</span></label></th>
                             <td>
                                 <input type="text" name="rtp-user-api-key" id="rtp-user-api-key" class="regular-text">
+                                <p class="description">API key can be found in the "Data sharing" section of "Account settings".</p>
                                 <span id="rtp-user-api-key_error" class="form_error"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row"><label for="rtp-user-api-id">Account API ID<span class="description"> (required)</span></label></th>
-                            <td>
-                                <input type="text" name="rtp-user-api-id" id="rtp-user-api-id" class="regular-text">
-                                <span id="rtp-user-api-id_error" class="form_error"></span>
                             </td>
                         </tr>
                     </tbody></table>
@@ -112,7 +106,6 @@
                 <h3>Account details:</h3>
                 <?php ?>
                 <p> <b>Account API Key</b> = <?php echo $relic_options_data['relic_api_key']; ?></p>
-                <p> <b>Account API ID</b> = <?php echo $relic_options_data['relic_id']; ?></p>
                 <p> <b>Browser API Key</b> = <?php echo $relic_browser_options_data['relic_app_key']; ?></p>
                 <p> <b>Browser API ID</b> = <?php echo $relic_browser_options_data['relic_app_id']; ?></p>
             </div>
