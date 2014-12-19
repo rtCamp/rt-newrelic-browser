@@ -5,7 +5,7 @@
     $app_option_name = 'rtp_relic_browser_details';
     $browser_app_list = 'rtp_relic_browser_list';
     global $current_user;
-    if ( get_option($option_name) == false || get_option($app_option_name) == false ) {
+    if ( (get_option($option_name) == false || get_option($app_option_name) == false) && get_option($browser_app_list) == false ) {
         ?>
         <h3>Do you have a New Relic account?</h3>
         <div class="rtp-relic-checkbox">
