@@ -1,4 +1,4 @@
-<div class="rtp-relic-settings-page">
+<div class="rtp-relic-settings-page wrap">
     <h2>New Relic Browser</h2>
     <?php
     $option_name = 'rtp_relic_account_details';

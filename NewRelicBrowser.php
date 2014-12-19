@@ -165,7 +165,7 @@ function rtp_relic_options_validate($input)
 {
 
     /* validate form if js not worked */
-
+    
     $rtp_relic_form_validated = rtp_relic_validate_form($_POST);
 
     if (!$rtp_relic_form_validated['valid']) {
