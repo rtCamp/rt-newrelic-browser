@@ -41,8 +41,27 @@
                     ?>
                     <p style="padding-left:70px;"><b>- OR -</b></p>
                     <input type="radio" class="rtp-select-browser-radio" id="create-browser-radio" value="create-account" name="rtp-relic-browser-id" >
-                    <label for="create-browser-radio">Create a new account</label>
+                    <label for="create-browser-radio">Create a new application</label>
                 </div>
+                <form id="rtp-relic-create-browser" class="<?php echo $new_relic_form; ?>" action="options.php" method="POST" enctype="multipart/form-data">
+                <?php
+                settings_fields('relic_options_settings');
+                ?>
+                <table class="form-table">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><label for="rtp-relic-browser-name">Application Name<span class="description"> (required)</span></label></th>
+                            <td>
+                                <input type="text" name="rtp-relic-browser-name" id="rtp-relic-browser-name" class="regular-text">
+                                <span id="rtp-relic-browser-name_error" class="form_error"></span>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                <input type="hidden" value="rtp-create-browser" name="rtp-relic-form-name">
+                <p class="submit">
+                    <input class="button-primary" type="submit" value="Submit" name="rtp-relic-get-browser-submit">
+                </p>
+            </form>
                 <form id="rtp-relic-select-browser" class="<?php echo $new_relic_form; ?>" action="options.php" method="POST" enctype="multipart/form-data">
                     <?php
                     settings_fields('relic_options_settings');

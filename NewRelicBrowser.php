@@ -165,7 +165,7 @@ function rtp_create_browser_app($app_name, $account_api_key)
 
 function rtp_relic_options_validate($input)
 {
-    
+
     /* validate form if js not worked */
     $rtp_relic_form_validated = rtp_relic_validate_form($_POST);
 
@@ -211,6 +211,18 @@ function rtp_relic_options_validate($input)
                 /* browser details saved so delete the browsers list from meta */
 
                 delete_option($browser_app_list_option);
+            }
+        } else if ("rtp-create-browser" == $_POST['rtp-relic-form-name']) {
+            $rtp_account_details = get_option($option_name);
+            $account_api_key = $rtp_account_details['relic_api_key'];
+            $browser_created = rtp_create_browser_app($_POST['rtp-relic-browser-name'], $account_api_key);
+
+            /* store the account details */
+            if ($browser_created) {
+                $account_details_array = array(
+                    'relic_api_key' => $account_api_key,
+                );
+                add_option($option_name, $account_details_array);
             }
         } else if ("rtp-get-browser" == $_POST['rtp-relic-form-name']) {
             /* get the list of browser apps */
@@ -341,7 +353,7 @@ function rtp_relic_options_validate($input)
                                                 <div style="font-size:15px;margin-top:20px;">
                                                     <p style="margin:2px">
                                                        <span>Email : </span>
-                                                       <span><a href="mailto:'.$_POST['relic-account-email'].'" target="_blank">'.$_POST['relic-account-email'].'</a></span>
+                                                       <span><a href="mailto:' . $_POST['relic-account-email'] . '" target="_blank">' . $_POST['relic-account-email'] . '</a></span>
                                                     </p>
                                                     <p style="margin:2px">
                                                     <span>Password : </span>

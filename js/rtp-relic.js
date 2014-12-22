@@ -44,11 +44,11 @@ jQuery( document ).ready( function( ) {
 
 		var selectedValue = jQuery( this ).val();
 		if ( 'create-account' == selectedValue ) {
-			jQuery( '#rtp-relic-add-account' ).css( 'display', 'block' );
+			jQuery( '#rtp-relic-create-browser' ).css( 'display', 'block' );
 			jQuery( '#rtp-relic-select-browser' ).css( 'display', 'none' );
 		} else {
 			jQuery( '#rtp-selected-browser-id' ).val( selectedValue );
-			jQuery( '#rtp-relic-add-account' ).css( 'display', 'none' );
+			jQuery( '#rtp-relic-create-browser' ).css( 'display', 'none' );
 			jQuery( '#rtp-relic-select-browser' ).css( 'display', 'block' );
 		}
 
@@ -67,13 +67,20 @@ jQuery( document ).ready( function( ) {
 			e.preventDefault();
 		}
 	} );
+	
+	jQuery( "#rtp-relic-create-browser" ).submit( function( e ) {
+		var is_valid = validate_form( "#rtp-relic-create-browser" );
+		if ( !is_valid ) {
+			e.preventDefault();
+		}
+	} );
 
 	function validate_form( formid ) {
 		var form_data = jQuery( formid ).serializeArray( );
 		var valid = true;
 		for ( var i = 0; i < form_data.length; i++ ) {
 			var element = form_data[i];
-			if ( element.name == 'relic-account-name' || element.name == 'relic-account-email' || element.name == 'relic-first-name' || element.name == 'relic-last-name' || element.name == 'rtp-user-api-id' || element.name == 'rtp-user-api-key' ) {
+			if ( element.name == 'relic-account-name' || element.name == 'relic-account-email' || element.name == 'relic-first-name' || element.name == 'relic-last-name' || element.name == 'rtp-user-api-id' || element.name == 'rtp-user-api-key' || element.name == 'rtp-relic-browser-name' ) {
 				if ( element.value == '' ) {
 					valid = false;
 					jQuery( formid + ' #' + element.name + "_error" ).text( 'Cannot be blank' );
