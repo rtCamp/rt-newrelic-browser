@@ -15,7 +15,7 @@ jQuery( document ).ready( function( ) {
 			height: 150,
 			modal: true,
 			buttons: {
-				"Remove": function() {
+				"Yes": function() {
 					jQuery( '#rtp-relic-remove-account' ).submit();
 				},
 				Cancel: function() {

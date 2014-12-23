@@ -207,6 +207,7 @@ function rtp_relic_options_validate($input)
                     'relic_app_script' => $browser_list[0]->loader_script
                 );
                 add_option($app_option_name, $browser_array);
+                add_settings_error('relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully');
 
                 /* browser details saved so delete the browsers list from meta */
 
@@ -223,6 +224,7 @@ function rtp_relic_options_validate($input)
                     'relic_api_key' => $account_api_key,
                 );
                 add_option($option_name, $account_details_array);
+                add_settings_error('relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully');
             }
         } else if ("rtp-get-browser" == $_POST['rtp-relic-form-name']) {
             /* get the list of browser apps */
@@ -258,6 +260,7 @@ function rtp_relic_options_validate($input)
                     'relic_api_key' => $account_api_key,
                 );
                 add_option($option_name, $main_array);
+                add_settings_error('relic_options', 'relic_options_error', 'Select Browser Application');
             } else {
                 /* create a browser app as the account doesn't contain any app */
                 $browser_created = rtp_create_browser_app($_SERVER['SERVER_NAME'], $account_api_key);
@@ -268,6 +271,7 @@ function rtp_relic_options_validate($input)
                         'relic_api_key' => $account_api_key,
                     );
                     add_option($option_name, $account_details_array);
+                    add_settings_error('relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully');
                 }
             }
         } else {
@@ -302,6 +306,7 @@ function rtp_relic_options_validate($input)
                     delete_option($app_option_name);
                     delete_option($browser_app_list_option);
                 }
+                add_settings_error('relic_options', 'relic_options_error', 'New Relic Browser App removed successfully');
             } else {
                 /* always set allow_api_access to true while creating account
                   start of API 1 */
@@ -378,7 +383,10 @@ function rtp_relic_options_validate($input)
                     /* end of API 1
                       Now create the browser app */
 
-                    rtp_create_browser_app($_POST['relic-account-name'], $json_data->api_key);
+                    $browser_created = rtp_create_browser_app($_POST['relic-account-name'], $json_data->api_key);
+                    if ($browser_created) {
+                        add_settings_error('relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully');
+                    }
                 } else {
                     add_settings_error('relic_options', 'relic_options_error', __('Error while creating account'));
                 }
