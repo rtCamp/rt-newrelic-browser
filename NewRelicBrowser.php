@@ -165,7 +165,7 @@ function rtp_create_browser_app($app_name, $account_api_key)
 
 function rtp_relic_options_validate($input)
 {
-
+    
     /* validate form if js not worked */
     $rtp_relic_form_validated = rtp_relic_validate_form($_POST);
 
@@ -354,7 +354,9 @@ function rtp_relic_options_validate($input)
 
                     $relic_headers = "MIME-Version: 1.0\r\n";
                     $relic_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-                    $relic_email_message = '<div style="font-size:15px;margin-top:20px;border:1px solid #6bffb2;border-radius:10px;padding:20px"><p>Your New Relic account details are given below :</p>
+                    $relic_email_message = '<div style="font-size:15px;margin-top:20px;border:1px solid #666;padding:20px 50px;">
+                                                <p><h1 style="color:#666;font-weight: 300;margin-top: 10px;">Welcome</h1></p>
+                                                <p>Your New Relic account details are given below :</p>
                                                 <div style="font-size:15px;margin-top:20px;">
                                                     <p style="margin:2px">
                                                        <span>Email : </span>
@@ -365,7 +367,7 @@ function rtp_relic_options_validate($input)
                                                     <span>' . $relic_password . '</span>
                                                     </p>
                                                 </div>
-                                            <p style="margin-top:10px">
+                                            <p style="margin-top:20px">
                                             <a href="https://dev-login.newrelic.com/">Click here</a> to login to your New Relic account.
                                             </p></div>';
                     wp_mail($_POST['relic-account-email'], 'New Relic Details', $relic_email_message, $relic_headers);
