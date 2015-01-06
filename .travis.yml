@@ -22,4 +22,9 @@ before_script:
     - cd $PLUGIN_DIR
     - phpenv rehash
     - npm install -g jshint
-    - if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION; fi
+
+script:
+    - find . -path ./bin -prune -o \( -name '*.php' -o -name '*.inc' \) -exec php -lf {} \;
+    - if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then phpunit; fi
+    - phpcs --ignore='tests/*' --standard=WordPress-Core $(find . -name '*.php')
+    - jshint .
