@@ -152,11 +152,15 @@ function rtp_create_browser_app($app_name, $account_api_key)
         return false;
     } else {
         /* stored the received browser application data */
+
+        /* insert browser monitoring key and browser app id before script ends */
+        $index = strpos($app_json_data->browser_application->loader_script, '</script>');
+        $newscript = substr_replace($browser_script, 'NREUM.info.applicationID='.$app_json_data->browser_application->id.' NREUM.info.licenseKey='.$app_json_data->browser_application->browser_monitoring_key, $index, 0);
         $browser_details_array = array(
             'relic_app_name' => $app_json_data->browser_application->name,
             'relic_app_key' => $app_json_data->browser_application->browser_monitoring_key,
             'relic_app_id' => $app_json_data->browser_application->id,
-            'relic_app_script' => $app_json_data->browser_application->loader_script
+            'relic_app_script' => $newscript
         );
         add_option('rtp_relic_browser_details', $browser_details_array);
         return true;
@@ -165,7 +169,7 @@ function rtp_create_browser_app($app_name, $account_api_key)
 
 function rtp_relic_options_validate($input)
 {
-    
+
     /* validate form if js not worked */
     $rtp_relic_form_validated = rtp_relic_validate_form($_POST);
 
@@ -198,13 +202,18 @@ function rtp_relic_options_validate($input)
                 $browser_script = $browser_list[0]->loader_script;
                 curl_close($get_browser_curl);
 
+                /* insert browser monitoring key and browser app id before script ends */
+                
+                $index = strpos($browser_script, '</script>');
+                $newscript = substr_replace($browser_script, 'NREUM.info.applicationID='.$browser_list[0]->id.' NREUM.info.licenseKey='.$browser_list[0]->browser_monitoring_key, $index, 0);
+
                 /* store the browser application details */
 
                 $browser_array = array(
                     'relic_app_name' => $browser_list[0]->name,
                     'relic_app_key' => $browser_list[0]->browser_monitoring_key,
                     'relic_app_id' => $browser_list[0]->id,
-                    'relic_app_script' => $browser_list[0]->loader_script
+                    'relic_app_script' => $newscript
                 );
                 add_option($app_option_name, $browser_array);
                 add_settings_error('relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully');
