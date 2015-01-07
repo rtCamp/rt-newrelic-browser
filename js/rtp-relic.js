@@ -30,7 +30,7 @@ jQuery( document ).ready( function( ) {
 	jQuery( '.rtp-relic-radio' ).click( function() {
 
 		var selectedValue = jQuery( this ).val();
-		if ( 'no' == selectedValue ) {
+		if ( 'no' === selectedValue ) {
 			jQuery( '#rtp-relic-get-browser' ).css( 'display', 'none' );
 			jQuery( '#rtp-relic-add-account' ).css( 'display', 'block' );
 		} else {
@@ -43,7 +43,7 @@ jQuery( document ).ready( function( ) {
 	jQuery( '.rtp-select-browser-radio' ).click( function() {
 
 		var selectedValue = jQuery( this ).val();
-		if ( 'create-account' == selectedValue ) {
+		if ( 'create-account' === selectedValue ) {
 			jQuery( '#rtp-relic-create-browser' ).css( 'display', 'block' );
 			jQuery( '#rtp-relic-select-browser' ).css( 'display', 'none' );
 		} else {
@@ -80,12 +80,12 @@ jQuery( document ).ready( function( ) {
 		var valid = true;
 		for ( var i = 0; i < form_data.length; i++ ) {
 			var element = form_data[i];
-			if ( element.name == 'relic-account-name' || element.name == 'relic-account-email' || element.name == 'relic-first-name' || element.name == 'relic-last-name' || element.name == 'rtp-user-api-id' || element.name == 'rtp-user-api-key' || element.name == 'rtp-relic-browser-name' ) {
-				if ( element.value == '' ) {
+			if ( element.name === 'relic-account-name' || element.name === 'relic-account-email' || element.name === 'relic-first-name' || element.name === 'relic-last-name' || element.name === 'rtp-user-api-id' || element.name === 'rtp-user-api-key' || element.name === 'rtp-relic-browser-name' ) {
+				if ( element.value === '' ) {
 					valid = false;
 					jQuery( formid + ' #' + element.name + "_error" ).text( 'Cannot be blank' );
 					jQuery( formid + ' #' + element.name + "_error" ).css( 'display', 'block' );
-				} else if ( element.name == 'relic-first-name' || element.name == 'relic-last-name' ) {
+				} else if ( element.name === 'relic-first-name' || element.name === 'relic-last-name' ) {
 					if ( !element.value.match( /^[A-Za-z]+$/ ) ) {
 						valid = false;
 						jQuery( formid + ' #' + element.name + "_error" ).text( 'Should contain characters only.' );
@@ -93,7 +93,7 @@ jQuery( document ).ready( function( ) {
 					} else {
 						jQuery( formid + ' #' + element.name + "_error" ).css( 'display', 'none' );
 					}
-				} else if ( element.name == 'relic-account-email' ) {
+				} else if ( element.name === 'relic-account-email' ) {
 					var email_valid_regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 					if ( !email_valid_regex.test( element.value ) ) {
 						valid = false;
