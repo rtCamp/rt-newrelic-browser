@@ -366,9 +366,9 @@ function rtp_relic_options_validate( $input )
 						)
 					);
 
-				$response = curl_exec( $curl );
-				curl_close( $curl );
-				$json_data = json_decode( $response );
+					$response = curl_exec( $curl );
+					curl_close( $curl );
+					$json_data = json_decode( $response );
 				if ( $json_data->error != '' ) {
 					add_settings_error( 'relic_options', 'relic_options_error', $json_data->error );
 				} else if ( isset( $json_data->api_key ) ) {
@@ -396,16 +396,14 @@ function rtp_relic_options_validate( $input )
 						wp_mail( $relic_user_mail, 'New Relic Details', $relic_email_message, $relic_headers );
 					}
 					/* store the received data */
-
-					$main_array = array(
+						$main_array = array(
 						'relic_account_name' => $json_data->name,
 						'relic_api_key' => $json_data->api_key,
 						'relic_id' => $json_data->id,
 						'relic_password' => $relic_password,
-					);
+						);
 					add_option( $option_name, $main_array );
-
-					/* end of API 1
+						/* end of API 1
 					  Now create the browser app */
 					if ( isset( $_POST['relic-account-name'] ) ){
 						$relic_account_name = sanitize_text_field( $_POST['relic-account-name'] );
@@ -420,7 +418,6 @@ function rtp_relic_options_validate( $input )
 			}
 		}
 	}
-
 	return $input;
 }
 
