@@ -5,6 +5,12 @@ php:
     - 5.4
     - 5.5
     
+env:
+    - WP_VERSION=4.0 WP_MULTISITE=0
+    - WP_VERSION=4.0 WP_MULTISITE=1
+    - WP_VERSION=latest WP_MULTISITE=0
+    - WP_VERSION=latest WP_MULTISITE=1
+
 before_script:
     - export PLUGIN_DIR=$(pwd)
     - export PLUGIN_SLUG=$(basename $(pwd) | sed 's/^wp-//')
