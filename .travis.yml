@@ -24,7 +24,6 @@ before_script:
     - npm install -g jshint
 
 script:
-    - find . -path ./bin -prune -o \( -name '*.php' -o -name '*.inc' \) -exec php -lf {} \;
     - if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then phpunit; fi
     - phpcs --ignore='tests/*' --standard=WordPress-Core $(find . -name '*.php')
     - jshint .
