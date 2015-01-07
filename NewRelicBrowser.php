@@ -79,9 +79,9 @@ function rtp_relic_validate_form( $relic_user_data )
 {
 
     $relic_valid = true;
-    $relic_error_message = "";
+    $relic_error_message = '';
 
-    if ( "rtp-get-browser" == $_POST['rtp-relic-form-name'] ) {
+    if ( 'rtp-get-browser' == $_POST['rtp-relic-form-name'] ) {
 	/* get browser list form */
 	if ( ( "" == $relic_user_data['rtp-user-api-key'] ) ) {
 	    $relic_valid = false;
