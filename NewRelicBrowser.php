@@ -104,7 +104,7 @@ function rtp_relic_validate_form( $relic_user_data )
 		} else if ( ! filter_var( $relic_user_data['relic-account-email'], FILTER_VALIDATE_EMAIL ) ) {
 			$relic_valid = false;
 			$relic_error_message = __( 'Not a valid email address' );
-		} else if ( ( ! preg_match( '/^[a-zA-Z ]*$/', $relic_user_data['relic-first-name'] )) || ( ! preg_match( '/^[a-zA-Z ]*$/', $relic_user_data['relic-last-name'] )) || ( ! preg_match( '/^[a-zA-Z ]*$/', $relic_user_data['relic-account-name'] )) ) {
+		} else if ( ( ! preg_match( '/^[a-zA-Z ]*$/', $relic_user_data['relic-first-name'] )) || ( ! preg_match( '/^[a-zA-Z ]*$/', $relic_user_data['relic-last-name'] )) ) {
 			$relic_valid = false;
 			$relic_error_message = __( 'Name should contain letters only' );
 		}
@@ -158,7 +158,7 @@ function rtp_create_browser_app( $app_name, $account_api_key )
 
 		/* insert browser monitoring key and browser app id before script ends */
 		$index = strpos( $app_json_data->browser_application->loader_script, '</script>' );
-		$newscript = substr_replace( $browser_script, 'NREUM.info.applicationID=' . $app_json_data->browser_application->id . ' NREUM.info.licenseKey=' . $app_json_data->browser_application->browser_monitoring_key, $index, 0 );
+		$newscript = substr_replace( $app_json_data->browser_application->loader_script, 'NREUM.info.applicationID=' . $app_json_data->browser_application->id . '; NREUM.info.licenseKey=' . $app_json_data->browser_application->browser_monitoring_key, $index, 0 );
 		$browser_details_array = array(
 			'relic_app_name' => $app_json_data->browser_application->name,
 			'relic_app_key' => $app_json_data->browser_application->browser_monitoring_key,
@@ -209,7 +209,7 @@ function rtp_relic_options_validate( $input )
 				/* insert browser monitoring key and browser app id before script ends */
 
 				$index = strpos( $browser_script, '</script>' );
-				$newscript = substr_replace( $browser_script, 'NREUM.info.applicationID=' . $browser_list[0]->id . ' NREUM.info.licenseKey=' . $browser_list[0]->browser_monitoring_key, $index, 0 );
+				$newscript = substr_replace( $browser_script, 'NREUM.info.applicationID=' . $browser_list[0]->id . '; NREUM.info.licenseKey=' . $browser_list[0]->browser_monitoring_key, $index, 0 );
 
 				/* store the browser application details */
 
@@ -329,19 +329,11 @@ function rtp_relic_options_validate( $input )
 			} else {
 				/* always set allow_api_access to true while creating account
 				  start of API 1 */
-				if ( isset( $_POST['relic-account-name'] ) ) {
 					$relic_account_name = sanitize_text_field( $_POST['relic-account-name'] );
-				}
-				if ( isset( $_POST['relic-account-email'] ) ){
 					$relic_account_email = sanitize_email( $_POST['relic-account-email'] );
-				}
-				if ( isset( $_POST['relic-first-name'] ) ){
 					$relic_first_name = sanitize_text_field( $_POST['relic-first-name'] );
-				}
-				if ( isset( $_POST['relic-last-name'] ) ){
 					$relic_last_name = sanitize_text_field( $_POST['relic-last-name'] );
-				}
-				$data = array(
+					$data = array(
 					account => array(
 						'name' => $relic_account_name,
 						'allow_api_access' => true,
@@ -445,10 +437,8 @@ function insert_relic_script()
 	if ( false !== get_option( $app_option_name ) ) {
 		$relic_browser_options_data = get_option( $app_option_name );
 		$output = $relic_browser_options_data['relic_app_script'];
-	} else {
-		$output = '';
+		echo $output;
 	}
-	echo $output;
 }
 
 add_action( 'wp_head', 'insert_relic_script', 1 );
