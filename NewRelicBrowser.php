@@ -104,7 +104,7 @@ function rtp_relic_validate_form( $relic_user_data )
 		} else if ( ! filter_var( $relic_user_data['relic-account-email'], FILTER_VALIDATE_EMAIL ) ) {
 			$relic_valid = false;
 			$relic_error_message = __( 'Not a valid email address' );
-		} else if ( ( ! preg_match( '/^[a-zA-Z ]*$/', $relic_user_data['relic-first-name'] )) || ( ! preg_match( '/^[a-zA-Z ]*$/', $relic_user_data['relic-last-name'] )) ) {
+		} else if ( ( ! preg_match( '/^[a-zA-Z ]*$/', $relic_user_data['relic-first-name'] )) || ( ! preg_match( '/^[a-zA-Z ]*$/', $relic_user_data['relic-last-name'] )) || ( ! preg_match( '/^[a-zA-Z ]*$/', $relic_user_data['relic-account-name'] )) ) {
 			$relic_valid = false;
 			$relic_error_message = __( 'Name should contain letters only' );
 		}
