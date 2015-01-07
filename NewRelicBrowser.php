@@ -151,7 +151,7 @@ function rtp_create_browser_app($app_name, $account_api_key)
         add_settings_error('relic_options', 'relic_options_error', $app_json_data->error->title);
         return false;
     } else {
-        /* stored the received browser application data */
+        // stored the received browser application data 
 
         /* insert browser monitoring key and browser app id before script ends */
         $index = strpos($app_json_data->browser_application->loader_script, '</script>');
