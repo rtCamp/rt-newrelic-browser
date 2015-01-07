@@ -350,21 +350,21 @@ function rtp_relic_options_validate( $input )
 						),
 						'subscriptions' => array(),
 					)
-				);
+					);
 
-				/* for this api data is to be pass in json */
+					/* for this api data is to be pass in json */
 
-				$dataString = json_encode( $data );
-				$curl = curl_init();
-				curl_setopt_array(
-					$curl, array(
-					CURLOPT_URL => 'https://staging.newrelic.com/api/v2/partners/191/accounts',
-					CURLOPT_POST => 1,
-					CURLOPT_RETURNTRANSFER => 1,
-					CURLOPT_HTTPHEADER => array( 'x-api-key:0118286cc87aca4eef6723d567a94b3916167fc4cf91177', 'Content-Type:application/json' ),
-					CURLOPT_POSTFIELDS => $dataString,
+					$dataString = json_encode( $data );
+					$curl = curl_init();
+					curl_setopt_array(
+						$curl, array(
+						CURLOPT_URL => 'https://staging.newrelic.com/api/v2/partners/191/accounts',
+						CURLOPT_POST => 1,
+						CURLOPT_RETURNTRANSFER => 1,
+						CURLOPT_HTTPHEADER => array( 'x-api-key:0118286cc87aca4eef6723d567a94b3916167fc4cf91177', 'Content-Type:application/json' ),
+						CURLOPT_POSTFIELDS => $dataString,
 						)
-				);
+					);
 
 				$response = curl_exec( $curl );
 				curl_close( $curl );
