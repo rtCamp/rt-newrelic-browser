@@ -60,7 +60,7 @@ class RelicFormValidateTest extends WP_UnitTestCase {
 		'relic-first-name' => 'rohan',
 		'relic-last-name' => 'veer',
 		'rtp-relic-form-submit' => 'submit',
-		'relic-account-name' => '',
+		'relic-account-name' => '  ',
 		'rtp-relic-form-name' => 'rtp-add-account'
 		);
 		$validation_array = rtp_relic_validate_form( $relic_data );

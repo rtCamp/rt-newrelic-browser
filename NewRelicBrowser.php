@@ -369,52 +369,52 @@ function rtp_relic_options_validate( $input )
 					$response = curl_exec( $curl );
 					curl_close( $curl );
 					$json_data = json_decode( $response );
-				if ( $json_data->error != '' ) {
-					add_settings_error( 'relic_options', 'relic_options_error', $json_data->error );
-				} else if ( isset( $json_data->api_key ) ) {
-					/* mail the account details to user */
-					if ( isset( $_POST['relic-account-email'] ) ){
-						$relic_user_mail = sanitize_email( $_POST['relic-account-email'] );
-						$relic_headers = "MIME-Version: 1.0\r\n";
-						$relic_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-						$relic_email_message = '<div style="font-size:15px;margin-top:20px;border:1px solid #666;padding:20px 50px;">
-												<p><h1 style="color:#666;font-weight: 300;margin-top: 10px;">Welcome</h1></p>
-												<p>Your New Relic account details are given below :</p>
-													<div style="font-size:15px;margin-top:20px;">
-														<p style="margin:2px">
-															<span>Email : </span>
-															<span><a href="mailto:' . $relic_user_mail . '" target="_blank">' . $relic_user_mail . '</a></span>
-														</p>
-												<p style="margin:2px">
-													<span>Password : </span>
-													<span>' . $relic_password . '</span>
-												</p>
-											</div>
-											<p style="margin-top:20px">
-											<a href="https://dev-login.newrelic.com/">Click here</a> to login to your New Relic account.
-											</p></div>';
-						wp_mail( $relic_user_mail, 'New Relic Details', $relic_email_message, $relic_headers );
+					if ( $json_data->error != '' ) {
+						add_settings_error( 'relic_options', 'relic_options_error', $json_data->error );
+					} else if ( isset( $json_data->api_key ) ) {
+						/* mail the account details to user */
+						if ( isset( $_POST['relic-account-email'] ) ){
+							$relic_user_mail = sanitize_email( $_POST['relic-account-email'] );
+							$relic_headers = "MIME-Version: 1.0\r\n";
+							$relic_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+							$relic_email_message = '<div style="font-size:15px;margin-top:20px;border:1px solid #666;padding:20px 50px;">
+													<p><h1 style="color:#666;font-weight: 300;margin-top: 10px;">Welcome</h1></p>
+													<p>Your New Relic account details are given below :</p>
+														<div style="font-size:15px;margin-top:20px;">
+															<p style="margin:2px">
+																<span>Email : </span>
+																<span><a href="mailto:' . $relic_user_mail . '" target="_blank">' . $relic_user_mail . '</a></span>
+															</p>
+													<p style="margin:2px">
+														<span>Password : </span>
+														<span>' . $relic_password . '</span>
+													</p>
+												</div>
+												<p style="margin-top:20px">
+												<a href="https://dev-login.newrelic.com/">Click here</a> to login to your New Relic account.
+												</p></div>';
+							wp_mail( $relic_user_mail, 'New Relic Details', $relic_email_message, $relic_headers );
+						}
+						/* store the received data */
+							$main_array = array(
+							'relic_account_name' => $json_data->name,
+							'relic_api_key' => $json_data->api_key,
+							'relic_id' => $json_data->id,
+							'relic_password' => $relic_password,
+							);
+						add_option( $option_name, $main_array );
+							/* end of API 1
+						  Now create the browser app */
+						if ( isset( $_POST['relic-account-name'] ) ){
+							$relic_account_name = sanitize_text_field( $_POST['relic-account-name'] );
+						}
+						$browser_created = rtp_create_browser_app( $relic_account_name, $json_data->api_key );
+						if ( $browser_created ) {
+							add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully' );
+						}
+					} else {
+						add_settings_error( 'relic_options', 'relic_options_error', __( 'Error while creating account' ) );
 					}
-					/* store the received data */
-						$main_array = array(
-						'relic_account_name' => $json_data->name,
-						'relic_api_key' => $json_data->api_key,
-						'relic_id' => $json_data->id,
-						'relic_password' => $relic_password,
-						);
-					add_option( $option_name, $main_array );
-						/* end of API 1
-					  Now create the browser app */
-					if ( isset( $_POST['relic-account-name'] ) ){
-						$relic_account_name = sanitize_text_field( $_POST['relic-account-name'] );
-					}
-					$browser_created = rtp_create_browser_app( $relic_account_name, $json_data->api_key );
-					if ( $browser_created ) {
-						add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully' );
-					}
-				} else {
-					add_settings_error( 'relic_options', 'relic_options_error', __( 'Error while creating account' ) );
-				}
 			}
 		}
 	}
