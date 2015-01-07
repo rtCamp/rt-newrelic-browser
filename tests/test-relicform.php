@@ -8,7 +8,8 @@ class RelicFormValidateTest extends WP_UnitTestCase {
 		'relic-first-name' => 'rohan123',
 		'relic-last-name' => 'veer',
 		'rtp-relic-form-submit' => 'submit',
-		'relic-account-name' => 'test'
+		'relic-account-name' => 'test',
+		'rtp-relic-form-name' => 'rtp-add-account'
 		);
 		$validation_array = rtp_relic_validate_form( $relic_data );
 		$this->assertEquals( FALSE, $validation_array['valid'] );
@@ -20,7 +21,8 @@ class RelicFormValidateTest extends WP_UnitTestCase {
 		'relic-first-name' => 'rohan',
 		'relic-last-name' => 'veer',
 		'rtp-relic-form-submit' => 'submit',
-		'relic-account-name' => 'test'
+		'relic-account-name' => 'test',
+		'rtp-relic-form-name' => 'rtp-add-account'
 		);
 		$validation_array = rtp_relic_validate_form( $relic_data );
 		$this->assertEquals( TRUE, $validation_array['valid'] );
@@ -32,7 +34,8 @@ class RelicFormValidateTest extends WP_UnitTestCase {
 		'relic-first-name' => 'rohan',
 		'relic-last-name' => 'veer12',
 		'rtp-relic-form-submit' => 'submit',
-		'relic-account-name' => 'test'
+		'relic-account-name' => 'test',
+		'rtp-relic-form-name' => 'rtp-add-account'
 		);
 		$validation_array = rtp_relic_validate_form( $relic_data );
 		$this->assertEquals( FALSE, $validation_array['valid'] );
@@ -44,7 +47,8 @@ class RelicFormValidateTest extends WP_UnitTestCase {
 		'relic-first-name' => 'rohan',
 		'relic-last-name' => 'veer',
 		'rtp-relic-form-submit' => 'submit',
-		'relic-account-name' => 'test'
+		'relic-account-name' => 'test',
+		'rtp-relic-form-name' => 'rtp-add-account'
 		);
 		$validation_array = rtp_relic_validate_form( $relic_data );
 		$this->assertEquals( FALSE, $validation_array['valid'] );
@@ -56,7 +60,8 @@ class RelicFormValidateTest extends WP_UnitTestCase {
 		'relic-first-name' => 'rohan',
 		'relic-last-name' => 'veer',
 		'rtp-relic-form-submit' => 'submit',
-		'relic-account-name' => 'te*st'
+		'relic-account-name' => 'te*st',
+		'rtp-relic-form-name' => 'rtp-add-account'
 		);
 		$validation_array = rtp_relic_validate_form( $relic_data );
 		$this->assertEquals( FALSE, $validation_array['valid'] );

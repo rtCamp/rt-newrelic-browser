@@ -80,8 +80,8 @@ function rtp_relic_validate_form( $relic_user_data )
 
 	$relic_valid = true;
 	$relic_error_message = '';
-	if ( isset( $_POST['rtp-relic-form-name'] ) ) {
-		$form_name = sanitize_text_field( $_POST['rtp-relic-form-name'] );
+	if ( isset( $relic_user_data['rtp-relic-form-name'] ) ) {
+		$form_name = sanitize_text_field( $relic_user_data['rtp-relic-form-name'] );
 	}
 
 	if ( 'rtp-get-browser' == $form_name ) {
