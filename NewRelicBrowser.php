@@ -138,7 +138,7 @@ function rtp_create_browser_app( $app_name, $account_api_key )
 	$app_curl = curl_init();
 	curl_setopt_array(
 		$app_curl, array(
-		CURLOPT_URL => 'https://staging-api.newrelic.com/v2/browser_applications.json',
+		CURLOPT_URL => 'https://api.newrelic.com/v2/browser_applications.json',
 		CURLOPT_POST => 1,
 		CURLOPT_RETURNTRANSFER => 1,
 		CURLOPT_HTTPHEADER => array( 'x-api-key:' . $account_api_key, 'Content-Type:application/json' ),
@@ -192,7 +192,7 @@ function rtp_relic_options_validate( $input )
 				/* In this curl we are filtering browser applications by using browser id */
 				$get_browser_curl = curl_init();
 				curl_setopt_array( $get_browser_curl, array(
-					CURLOPT_URL => 'https://staging-api.newrelic.com/v2/browser_applications.json?filter[ids]=' . sanitize_text_field( $_POST['rtp-selected-browser-id'] ),
+					CURLOPT_URL => 'https://api.newrelic.com/v2/browser_applications.json?filter[ids]=' . sanitize_text_field( $_POST['rtp-selected-browser-id'] ),
 					CURLOPT_RETURNTRANSFER => 1,
 					CURLOPT_CUSTOMREQUEST => 'GET',
 					CURLOPT_HTTPHEADER => array( 'x-api-key:' . $rtp_account_details['relic_api_key'], 'Content-Type:application/json' ),
@@ -248,7 +248,7 @@ function rtp_relic_options_validate( $input )
 			$get_app_list_curl = curl_init();
 			curl_setopt_array(
 				$get_app_list_curl, array(
-				CURLOPT_URL => 'https://staging-api.newrelic.com/v2/browser_applications.json',
+				CURLOPT_URL => 'https://api.newrelic.com/v2/browser_applications.json',
 				CURLOPT_RETURNTRANSFER => 1,
 				CURLOPT_HTTPHEADER => array( 'x-api-key:' . $account_api_key, 'Content-Type:application/json' ),
 					)
@@ -305,10 +305,10 @@ function rtp_relic_options_validate( $input )
 					$delete_curl = curl_init();
 					curl_setopt_array(
 						$delete_curl, array(
-						CURLOPT_URL => 'https://staging.newrelic.com/api/v2/partners/191/accounts/' . $account_id,
+						CURLOPT_URL => 'https://rpm.newrelic.com/api/v2/partners/857/accounts/' . $account_id,
 						CURLOPT_CUSTOMREQUEST => 'DELETE',
 						CURLOPT_RETURNTRANSFER => 1,
-						CURLOPT_HTTPHEADER => array( 'x-api-key:0118286cc87aca4eef6723d567a94b3916167fc4cf91177', 'Content-Type:application/json' ),
+						CURLOPT_HTTPHEADER => array( 'x-api-key:6155aee398970036405f017b9f788801ed32f23e208f2d4', 'Content-Type:application/json' ),
 							)
 					);
 					$delete_response = curl_exec( $delete_curl );
@@ -358,10 +358,10 @@ function rtp_relic_options_validate( $input )
 					$curl = curl_init();
 					curl_setopt_array(
 						$curl, array(
-						CURLOPT_URL => 'https://staging.newrelic.com/api/v2/partners/191/accounts',
+						CURLOPT_URL => 'https://rpm.newrelic.com/api/v2/partners/857/accounts',
 						CURLOPT_POST => 1,
 						CURLOPT_RETURNTRANSFER => 1,
-						CURLOPT_HTTPHEADER => array( 'x-api-key:0118286cc87aca4eef6723d567a94b3916167fc4cf91177', 'Content-Type:application/json' ),
+						CURLOPT_HTTPHEADER => array( 'x-api-key:6155aee398970036405f017b9f788801ed32f23e208f2d4', 'Content-Type:application/json' ),
 						CURLOPT_POSTFIELDS => $dataString,
 						)
 					);
@@ -396,7 +396,7 @@ function rtp_relic_options_validate( $input )
 								$relic_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 								$relic_email_message = '<div style="font-size:15px;margin-top:20px;border:1px solid #666;padding:20px 50px;">
 													<p><h1 style="color:#666;font-weight: 300;margin-top: 10px;">Welcome to New Relic Browser</h1></p>
-													<p>Thanks for adding New Relic Browser monitoring of '.$relic_account_name.'. Please <a href="https://dev.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'">login</a> to your New Relic account and change your temporary password below :</p>
+													<p>Thanks for adding New Relic Browser monitoring of '.$relic_account_name.'. Please <a href="https://rpm.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'">login</a> to your New Relic account and change your temporary password below :</p>
 														<div style="font-size:15px;margin-top:20px;border:1px solid #666;padding: 15px;">
 															<p style="margin:2px">
 																<span>Email : </span>
@@ -411,7 +411,7 @@ function rtp_relic_options_validate( $input )
 												For help getting started with New Relic Browser, please visit <a href="https://docs.newrelic.com/docs/browser/new-relic-browser">https://docs.newrelic.com/docs/browser/new-relic-browser</a> and <a href="https://discuss.newrelic.com/c/browser">https://discuss.newrelic.com/c/browser</a>
 												</p>
 												<p style="margin-top:20px">
-												Be sure to start your 15-day free trial of New Relic Browser Pro by clicking the "Activate" button on <a href="https://dev.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'">https://dev.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'</a> After 15 days, if you choose to not upgrade to New Relic Browser Pro, your account will switch to Browser Lite, which you can use for free, forever!
+												Be sure to start your 15-day free trial of New Relic Browser Pro by clicking the "Activate" button on <a href="https://rpm.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'">https://rpm.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'</a> After 15 days, if you choose to not upgrade to New Relic Browser Pro, your account will switch to Browser Lite, which you can use for free, forever!
 												</p>
 												</div>';
 								wp_mail( $relic_user_mail, $relic_subject, $relic_email_message, $relic_headers );
