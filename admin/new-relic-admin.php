@@ -141,11 +141,16 @@
 		if ( false !== get_option( $option_name ) && false !== get_option( $app_option_name ) ) {
 			$relic_options_data = get_option( $option_name );
 			$relic_browser_options_data = get_option( $app_option_name );
+			if( array_key_exists( 'relic_id', $relic_options_data ) ) {
+				$relic_login_url = 'https://rpm.newrelic.com/accounts/'.$relic_options_data['relic_id'].'/browser/'.$relic_browser_options_data['relic_app_id'];
+			} else {
+				$relic_login_url = 'https://rpm.newrelic.com/login';
+			}
 			?>
 			<div class="rtp-relic-settings-page-details">
 				<h3>Account details:</h3>
 				<?php ?>
-				<p><b><a href="https://rpm.newrelic.com/login">Login</a></b> to your New Relic Account</p>
+				<p><b><a href="<?php echo $relic_login_url ?>">Login</a></b> to your New Relic Account</p>
 				<p> <b>Account API Key</b> = <?php echo $relic_options_data['relic_api_key']; ?></p>
 				<p> <b>Browser App Name</b> = <?php echo $relic_browser_options_data['relic_app_name']; ?></p>
 				<p> <b>Browser Monitoring Key</b> = <?php echo $relic_browser_options_data['relic_app_key']; ?></p>

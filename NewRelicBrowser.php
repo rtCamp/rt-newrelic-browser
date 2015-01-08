@@ -397,7 +397,7 @@ function rtp_relic_options_validate( $input )
 								$relic_email_message = '<div style="font-size:15px;margin-top:20px;border:1px solid #666;padding:20px 50px;">
 													<p><h1 style="color:#666;font-weight: 300;margin-top: 10px;">Welcome to New Relic Browser</h1></p>
 													<p>Thanks for adding New Relic Browser monitoring of '.$relic_account_name.'. Please <a href="https://rpm.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'">login</a> to your New Relic account and change your temporary password below :</p>
-														<div style="font-size:15px;margin-top:20px;border:1px solid #666;padding: 15px;">
+														<div style="font-size:15px;margin:20px 0;display: inline-block;border:1px solid #666;padding: 15px;">
 															<p style="margin:2px">
 																<span>Email : </span>
 																<span><a href="mailto:' . $relic_user_mail . '" target="_blank">' . $relic_user_mail . '</a></span>
