@@ -396,7 +396,7 @@ function rtp_relic_options_validate( $input )
 								$relic_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 								$relic_email_message = '<div style="font-size:15px;margin-top:20px;border:1px solid #666;padding:20px 50px;">
 													<p><h1 style="color:#666;font-weight: 300;margin-top: 10px;">Welcome to New Relic Browser</h1></p>
-													<p>Thanks for adding New Relic Browser monitoring of '.$relic_account_name.'. Please <a href="https://rpm.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'">login</a> to your New Relic account and change your temporary password below :</p>
+													<p>Thanks for adding New Relic Browser monitoring of '.$relic_account_name.'. Please <a href="https://rpm.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'">login</a> to your New Relic account and change your temporary password below:</p>
 														<div style="font-size:15px;margin:20px 0;display: inline-block;border:1px solid #666;padding: 15px;">
 															<p style="margin:2px">
 																<span>Email : </span>
@@ -408,10 +408,10 @@ function rtp_relic_options_validate( $input )
 													</p>
 												</div>
 												<p style="margin-top:20px">
-												For help getting started with New Relic Browser, please visit <a href="https://docs.newrelic.com/docs/browser/new-relic-browser">https://docs.newrelic.com/docs/browser/new-relic-browser</a> and <a href="https://discuss.newrelic.com/c/browser">https://discuss.newrelic.com/c/browser</a>
+												For help on getting started with New Relic Browser, please visit <a href="https://docs.newrelic.com/docs/browser/new-relic-browser">https://docs.newrelic.com/docs/browser/new-relic-browser</a> and <a href="https://discuss.newrelic.com/c/browser">https://discuss.newrelic.com/c/browser</a>
 												</p>
 												<p style="margin-top:20px">
-												Be sure to start your 15-day free trial of New Relic Browser Pro by clicking the "Activate" button on <a href="https://rpm.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'">https://rpm.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'</a> After 15 days, if you choose to not upgrade to New Relic Browser Pro, your account will switch to Browser Lite, which you can use for free, forever!
+												Be sure to start your 14-day free trial of New Relic Browser Pro by clicking the "Activate" button on <a href="https://rpm.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'">https://rpm.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'</a> After 15 days, if you choose to not upgrade to New Relic Browser Pro, your account will switch to Browser Lite, which you can use for free, forever!
 												</p>
 												</div>';
 								wp_mail( $relic_user_mail, $relic_subject, $relic_email_message, $relic_headers );
