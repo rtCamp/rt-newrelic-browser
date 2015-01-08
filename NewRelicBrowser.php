@@ -37,7 +37,7 @@ function rtp_relic_page_help()
 				'title' => __( 'Overview' ),
 				'content' => __(
 					'<p>This page will allow you to integrate your New Relic Browser app with your website. 
-					If do not have New Relic account, then just select "No" and provide required details. The New Relic script will be loaded automatically in &lt;head&gt; tag of your site without any manual effort.<p>'
+					If you do not have New Relic account, then just select "No" and provide required details. The New Relic script will be loaded automatically in &lt;head&gt; tag of your site without any manual effort.<p>'
 				) , )
 	);
 	$screen->add_help_tab(
