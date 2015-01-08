@@ -151,7 +151,7 @@ function rtp_create_browser_app( $app_name, $account_api_key )
 	$app_json_data = json_decode( $app_response );
 
 	if ( empty( $app_json_data->browser_application->loader_script ) ) {
-		add_settings_error( 'relic_options', 'relic_options_error', $app_json_data->error->title );
+		add_settings_error( 'relic_options', 'relic_options_error', $app_json_data->error->title, 'error' );
 		return false;
 	} else {
 		// stored the received browser application data
@@ -178,7 +178,7 @@ function rtp_relic_options_validate( $input )
 
 	if ( ! $rtp_relic_form_validated['valid'] ) {
 		/* form not validated throw an error */
-		add_settings_error( 'relic_options', 'relic_options_error', $rtp_relic_form_validated['message'] );
+		add_settings_error( 'relic_options', 'relic_options_error', $rtp_relic_form_validated['message'], 'error' );
 	} else {
 		/* form validated go ahead */
 		$option_name = 'rtp_relic_account_details';
@@ -220,7 +220,7 @@ function rtp_relic_options_validate( $input )
 					'relic_app_script' => $newscript,
 				);
 				add_option( $app_option_name, $browser_array );
-				add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully' );
+				add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully', 'updated' );
 
 				/* browser details saved so delete the browsers list from meta */
 
@@ -238,7 +238,7 @@ function rtp_relic_options_validate( $input )
 					'relic_api_key' => $account_api_key,
 				);
 				add_option( $option_name, $account_details_array );
-				add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully' );
+				add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully', 'updated' );
 			}
 		} else if ( 'rtp-get-browser' == $_POST['rtp-relic-form-name'] ) {
 			/* get the list of browser apps */
@@ -276,7 +276,7 @@ function rtp_relic_options_validate( $input )
 					'relic_api_key' => $account_api_key,
 				);
 				add_option( $option_name, $main_array );
-				add_settings_error( 'relic_options', 'relic_options_error', 'Select Browser Application' );
+				add_settings_error( 'relic_options', 'relic_options_error', 'Select Browser Application', 'updated' );
 			} else {
 				/* create a browser app as the account doesn't contain any app */
 				if ( isset( $_SERVER['SERVER_NAME'] ) ) {
@@ -288,7 +288,7 @@ function rtp_relic_options_validate( $input )
 						'relic_api_key' => $account_api_key,
 					);
 					add_option( $option_name, $account_details_array );
-					add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully' );
+					add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully', 'updated' );
 				}
 			}
 		} else {
@@ -325,7 +325,7 @@ function rtp_relic_options_validate( $input )
 					delete_option( $app_option_name );
 					delete_option( $browser_app_list_option );
 				}
-				add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App removed successfully' );
+				add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App removed successfully', 'updated' );
 			} else {
 				/* always set allow_api_access to true while creating account
 				  start of API 1 */
@@ -334,7 +334,7 @@ function rtp_relic_options_validate( $input )
 					$relic_first_name = sanitize_text_field( $_POST['relic-first-name'] );
 					$relic_last_name = sanitize_text_field( $_POST['relic-last-name'] );
 					$data = array(
-					account => array(
+					'account' => array(
 						'name' => $relic_account_name,
 						'allow_api_access' => true,
 						'testing' => true,
@@ -370,31 +370,8 @@ function rtp_relic_options_validate( $input )
 					curl_close( $curl );
 					$json_data = json_decode( $response );
 					if ( $json_data->error != '' ) {
-						add_settings_error( 'relic_options', 'relic_options_error', $json_data->error );
+						add_settings_error( 'relic_options', 'relic_options_error', $json_data->error, 'error' );
 					} else if ( isset( $json_data->api_key ) ) {
-						/* mail the account details to user */
-						if ( isset( $_POST['relic-account-email'] ) ){
-							$relic_user_mail = sanitize_email( $_POST['relic-account-email'] );
-							$relic_headers = "MIME-Version: 1.0\r\n";
-							$relic_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-							$relic_email_message = '<div style="font-size:15px;margin-top:20px;border:1px solid #666;padding:20px 50px;">
-													<p><h1 style="color:#666;font-weight: 300;margin-top: 10px;">Welcome</h1></p>
-													<p>Your New Relic account details are given below :</p>
-														<div style="font-size:15px;margin-top:20px;">
-															<p style="margin:2px">
-																<span>Email : </span>
-																<span><a href="mailto:' . $relic_user_mail . '" target="_blank">' . $relic_user_mail . '</a></span>
-															</p>
-													<p style="margin:2px">
-														<span>Password : </span>
-														<span>' . $relic_password . '</span>
-													</p>
-												</div>
-												<p style="margin-top:20px">
-												<a href="https://dev-login.newrelic.com/">Click here</a> to login to your New Relic account.
-												</p></div>';
-							wp_mail( $relic_user_mail, 'New Relic Details', $relic_email_message, $relic_headers );
-						}
 						/* store the received data */
 							$main_array = array(
 							'relic_account_name' => $json_data->name,
@@ -410,10 +387,39 @@ function rtp_relic_options_validate( $input )
 						}
 						$browser_created = rtp_create_browser_app( $relic_account_name, $json_data->api_key );
 						if ( $browser_created ) {
-							add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully' );
+							/* mail the account details to user */
+							if ( isset( $_POST['relic-account-email'] ) ){
+								$relic_user_mail = sanitize_email( $_POST['relic-account-email'] );
+								$browser_app_details = get_option( 'rtp_relic_browser_details' );
+								$relic_subject = 'Welcome to New Relic Browser monitoring of '.$relic_account_name;
+								$relic_headers = "MIME-Version: 1.0\r\n";
+								$relic_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+								$relic_email_message = '<div style="font-size:15px;margin-top:20px;border:1px solid #666;padding:20px 50px;">
+													<p><h1 style="color:#666;font-weight: 300;margin-top: 10px;">Welcome to New Relic Browser</h1></p>
+													<p>Thanks for adding New Relic Browser monitoring of '.$relic_account_name.'. Please <a href="https://dev.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'">login</a> to your New Relic account and change your temporary password below :</p>
+														<div style="font-size:15px;margin-top:20px;border:1px solid #666;padding: 15px;">
+															<p style="margin:2px">
+																<span>Email : </span>
+																<span><a href="mailto:' . $relic_user_mail . '" target="_blank">' . $relic_user_mail . '</a></span>
+															</p>
+													<p style="margin:2px">
+														<span>Password : </span>
+														<span>' . $relic_password . '</span>
+													</p>
+												</div>
+												<p style="margin-top:20px">
+												For help getting started with New Relic Browser, please visit <a href="https://docs.newrelic.com/docs/browser/new-relic-browser">https://docs.newrelic.com/docs/browser/new-relic-browser</a> and <a href="https://discuss.newrelic.com/c/browser">https://discuss.newrelic.com/c/browser</a>
+												</p>
+												<p style="margin-top:20px">
+												Be sure to start your 15-day free trial of New Relic Browser Pro by clicking the "Activate" button on <a href="https://dev.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'">https://dev.newrelic.com/accounts/'.$json_data->id.'/browser/'.$browser_app_details['relic_app_id'].'</a> After 15 days, if you choose to not upgrade to New Relic Browser Pro, your account will switch to Browser Lite, which you can use for free, forever!
+												</p>
+												</div>';
+								wp_mail( $relic_user_mail, $relic_subject, $relic_email_message, $relic_headers );
+							}
+							add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully', 'updated' );
 						}
 					} else {
-						add_settings_error( 'relic_options', 'relic_options_error', __( 'Error while creating account' ) );
+						add_settings_error( 'relic_options', 'relic_options_error', __( 'Error while creating account' ), 'error' );
 					}
 			}
 		}

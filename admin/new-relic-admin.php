@@ -145,9 +145,11 @@
 			<div class="rtp-relic-settings-page-details">
 				<h3>Account details:</h3>
 				<?php ?>
+				<p><b><a href="https://dev-login.newrelic.com/login">Login</a></b> to your New Relic Account</p>
 				<p> <b>Account API Key</b> = <?php echo $relic_options_data['relic_api_key']; ?></p>
-				<p> <b>Browser API Key</b> = <?php echo $relic_browser_options_data['relic_app_key']; ?></p>
-				<p> <b>Browser API ID</b> = <?php echo $relic_browser_options_data['relic_app_id']; ?></p>
+				<p> <b>Browser App Name</b> = <?php echo $relic_browser_options_data['relic_app_name']; ?></p>
+				<p> <b>Browser Monitoring Key</b> = <?php echo $relic_browser_options_data['relic_app_key']; ?></p>
+				<p> <b>Browser App ID</b> = <?php echo $relic_browser_options_data['relic_app_id']; ?></p>
 			</div>
 			<div id="rtp-dialog-confirm" title="Remove Account" class="hidden">
 				<p><b>Are you sure?</b></p>
