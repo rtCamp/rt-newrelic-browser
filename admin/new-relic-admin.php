@@ -141,7 +141,7 @@
 		if ( false !== get_option( $option_name ) && false !== get_option( $app_option_name ) ) {
 			$relic_options_data = get_option( $option_name );
 			$relic_browser_options_data = get_option( $app_option_name );
-			if( array_key_exists( 'relic_id', $relic_options_data ) ) {
+			if ( array_key_exists( 'relic_id', $relic_options_data ) ) {
 				$relic_login_url = 'https://rpm.newrelic.com/accounts/'.$relic_options_data['relic_id'].'/browser/'.$relic_browser_options_data['relic_app_id'];
 			} else {
 				$relic_login_url = 'https://rpm.newrelic.com/login';
