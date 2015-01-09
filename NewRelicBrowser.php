@@ -35,16 +35,16 @@ function rtp_relic_page_help()
 		array(
 				'id' => 'rtp_relic_page_overview_tab',
 				'title' => __( 'Overview' ),
-				'content' => __(
-					'<p>This page will allow you to integrate your New Relic Browser app with your website. 
-					If you do not have New Relic account, then just select "No" and provide required details. The New Relic script will be loaded automatically in &lt;head&gt; tag of your site without any manual effort.<p>'
-				) , )
+				'content' => '<p>'.__(
+					'This page will allow you to integrate your New Relic Browser app with your website. 
+					If you do not have New Relic account, then just select "No" and provide required details. The New Relic script will be loaded automatically in &lt;head&gt; tag of your site without any manual effort.'
+				).'</p>' , )
 	);
 	$screen->add_help_tab(
 		array(
 				'id' => 'rtp_relic_page_about_tab',
 				'title' => __( 'New Relic Browser' ),
-				'content' => __( '<p>New Relic Browser provides deep visibility and actionable insights into real users experiences on your website. With standard page load timing (sometimes referred to as real user monitoring or RUM), New Relic measures the overall time to load the entire webpage. However, New Relic Browser goes beyond RUM to also help you monitor the performance of individual sessions, AJAX requests, and JavaScript errors—extending the monitoring throughout the entire life cycle of the page.<p>' ),
+				'content' => '<p>'.__( 'New Relic Browser provides deep visibility and actionable insights into real users experiences on your website. With standard page load timing (sometimes referred to as real user monitoring or RUM), New Relic measures the overall time to load the entire webpage. However, New Relic Browser goes beyond RUM to also help you monitor the performance of individual sessions, AJAX requests, and JavaScript errors—extending the monitoring throughout the entire life cycle of the page.' ).'</p>',
 			)
 	);
 }
@@ -220,7 +220,7 @@ function rtp_relic_options_validate( $input )
 					'relic_app_script' => $newscript,
 				);
 				add_option( $app_option_name, $browser_array );
-				add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully', 'updated' );
+				add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App integrated successfully' ), 'updated' );
 
 				/* browser details saved so delete the browsers list from meta */
 
@@ -238,7 +238,7 @@ function rtp_relic_options_validate( $input )
 					'relic_api_key' => $account_api_key,
 				);
 				add_option( $option_name, $account_details_array );
-				add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully', 'updated' );
+				add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App integrated successfully' ), 'updated' );
 			}
 		} else if ( 'rtp-get-browser' == $_POST['rtp-relic-form-name'] ) {
 			/* get the list of browser apps */
@@ -276,7 +276,7 @@ function rtp_relic_options_validate( $input )
 					'relic_api_key' => $account_api_key,
 				);
 				add_option( $option_name, $main_array );
-				add_settings_error( 'relic_options', 'relic_options_error', 'Select Browser Application', 'updated' );
+				add_settings_error( 'relic_options', 'relic_options_error', __( 'Select Browser Application' ), 'updated' );
 			} else {
 				/* create a browser app as the account doesn't contain any app */
 				if ( isset( $_SERVER['SERVER_NAME'] ) ) {
@@ -288,7 +288,7 @@ function rtp_relic_options_validate( $input )
 						'relic_api_key' => $account_api_key,
 					);
 					add_option( $option_name, $account_details_array );
-					add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully', 'updated' );
+					add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App integrated successfully' ), 'updated' );
 				}
 			}
 		} else {
@@ -325,7 +325,7 @@ function rtp_relic_options_validate( $input )
 					delete_option( $app_option_name );
 					delete_option( $browser_app_list_option );
 				}
-				add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App removed successfully', 'updated' );
+				add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App removed successfully' ), 'updated' );
 			} else {
 				/* always set allow_api_access to true while creating account
 				  start of API 1 */
@@ -337,7 +337,7 @@ function rtp_relic_options_validate( $input )
 					'account' => array(
 						'name' => $relic_account_name,
 						'allow_api_access' => true,
-						'testing' => true,
+						'testing' => false,
 						'users' => array(
 							array(
 								'email' => $relic_account_email,
@@ -416,7 +416,7 @@ function rtp_relic_options_validate( $input )
 												</div>';
 								wp_mail( $relic_user_mail, $relic_subject, $relic_email_message, $relic_headers );
 							}
-							add_settings_error( 'relic_options', 'relic_options_error', 'New Relic Browser App integrated successfully', 'updated' );
+							add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App integrated successfully' ), 'updated' );
 						}
 					} else {
 						add_settings_error( 'relic_options', 'relic_options_error', __( 'Error while creating account' ), 'error' );
