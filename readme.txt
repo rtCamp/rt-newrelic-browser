@@ -11,6 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 This plugin will allow you to integrate New Relic Browser app in your website.
 
 == Description ==
+
 New Relic Browser provides deep visibility and actionable insights into real users experiences on your website.
 With standard page load timing (sometimes referred to as real user monitoring or RUM), New Relic measures the overall time to load the entire webpage.
 However, New Relic Browser goes beyond RUM to also help you monitor the performance of individual sessions, AJAX requests, and JavaScript errors—extending the monitoring throughout the entire life cycle of the page.
@@ -39,6 +40,17 @@ Hit "Submit" and the New Relic script will be loaded automatically in <head> tag
 * Alternatively, you can [download](http://downloads.wordpress.org/plugin/rt-newrelic-browser.zip "Download New Relic Browser by rtCamp") the plugin from the repository. Unzip it and upload it to the plugins folder of your WordPress installation (`wp-content/plugins/` directory of your WordPress installation).
 * Activate it through the 'Plugins' section.
 * Access the settings page from WordPress backend under `Settings > New Relic Browser`.
+
+== Frequently Asked Questions ==
+
+= What if I do not have New Relic account? =
+You can easily create one using this plugin.
+
+= If I have account, then where do I find API Key? =
+In your New Relic account, go to 'Account settings' from top right menu where your username is shown. Then on the next page, select 'Data sharing' from left menu. Make sure you use 'API Key' and not 'Data access key'.
+
+= What if I accidentally delete the integrated browser app from backend? =
+No worries. You can integrate it again using your API Key.
 
 == Screenshots ==
 
