@@ -8,7 +8,7 @@ Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin will allow you to integrate New Relic Browser app in your website. If you do not have New Relic account then you can create one helps you to create a New Relic Browser application then you can easily create one using the plugin.
+This plugin will allow you to integrate New Relic Browser app in your website.
 
 == Description ==
 New Relic Browser provides deep visibility and actionable insights into real users experiences on your website.
@@ -39,6 +39,13 @@ Hit "Submit" and the New Relic script will be loaded automatically in <head> tag
 * Alternatively, you can [download](http://downloads.wordpress.org/plugin/rt-newrelic-browser.zip "Download New Relic Browser by rtCamp") the plugin from the repository. Unzip it and upload it to the plugins folder of your WordPress installation (`wp-content/plugins/` directory of your WordPress installation).
 * Activate it through the 'Plugins' section.
 * Access the settings page from WordPress backend under `Settings > New Relic Browser`.
+
+== Screenshots ==
+
+1. Select if you have New Relic account or not.
+2. If you have New Relic account then select Browser Application as part of next step.
+3. Enter required details if you do not have New Relic account.
+4. Screen showing successful App integration with details.
 
 == Changelog ==
 
