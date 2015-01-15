@@ -131,10 +131,10 @@ class WordPress_Readme_Parser {
 													$contributor = strtolower( $contributor );
 													// @todo Map to GitHub account
 													return sprintf( '[%1$s](http://profiles.wordpress.org/%1$s)', $contributor );
-												}, $this->metadata['Contributors'] ) );
+		}, $this->metadata['Contributors'] ) );
 		$formatted_metadata['Tags']         = join( ', ', array_map( function ( $tag ) {
 													return sprintf( '[%1$s](http://wordpress.org/plugins/tags/%1$s)', $tag );
-												}, $this->metadata['Tags'] ) );
+		}, $this->metadata['Tags'] ) );
 		$formatted_metadata['License']      = sprintf( '[%s](%s)', $formatted_metadata['License'], $formatted_metadata['License URI'] );
 		unset( $formatted_metadata['License URI'] );
 		if ( 'trunk' === $this->metadata['Stable tag'] ) {
