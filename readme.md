@@ -36,7 +36,7 @@ Hit "Submit" and the New Relic script will be loaded automatically in <head> tag
 
 * [GitHub](http://github.com/rtcamp/rt-newrelic-browser) - Please mention your wordpress.org username when sending pull requests.
 
-[![Build Status](https://travis-ci.org///github.com/rtCamp/rt-newrelic-browser.png?branch=master)](https://travis-ci.org///github.com/rtCamp/rt-newrelic-browser)
+[![Build Status](https://travis-ci.org/rtCamp/rt-newrelic-browser.png?branch=master)](https://travis-ci.org/rtCamp/rt-newrelic-browser)
 
 ## Installation ##
 
