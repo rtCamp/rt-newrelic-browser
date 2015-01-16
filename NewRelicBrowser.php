@@ -392,10 +392,10 @@ function rtp_relic_options_validate( $input )
 		} else if ( 'rtp-remove-account' == $_POST['rtp-relic-form-name'] ) {
 			/* if the account data is already stored then delete the account */
 				/* curl request to remove account */
-				if ( '' != $_POST['rtp-relic-account-id'] ) {
-					if ( isset( $_POST['rtp-relic-account-id'] ) ) {
+			if ( '' != $_POST['rtp-relic-account-id'] ) {
+				if ( isset( $_POST['rtp-relic-account-id'] ) ) {
 						$account_id = sanitize_text_field( $_POST['rtp-relic-account-id'] );
-					}
+				}
 					$delete_curl = curl_init();
 					curl_setopt_array(
 						$delete_curl, array(
@@ -413,14 +413,14 @@ function rtp_relic_options_validate( $input )
 					delete_option( $option_name );
 					delete_option( $app_option_name );
 					delete_option( $browser_app_list_option );
-				} else {
+			} else {
 					/* delete the stored meta */
 					delete_option( $option_name );
 					delete_option( $app_option_name );
 					delete_option( $browser_app_list_option );
-				}
-				add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App removed successfully','rt-new-relic' ), 'updated' );
 			}
+				add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App removed successfully','rt-new-relic' ), 'updated' );
+		}
 	}
 	return $input;
 }
