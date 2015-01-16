@@ -157,13 +157,13 @@ function rtp_create_browser_app( $app_name, $account_api_key )
 		// stored the received browser application data
 
 		/* insert browser monitoring key and browser app id before script ends */
-		$index = strpos( $app_json_data->browser_application->loader_script, '</script>' );
-		$newscript = substr_replace( $app_json_data->browser_application->loader_script, 'NREUM.info.applicationID=' . $app_json_data->browser_application->id . '; NREUM.info.licenseKey=' . $app_json_data->browser_application->browser_monitoring_key, $index, 0 );
+		//$index = strpos( $app_json_data->browser_application->loader_script, '</script>' );
+		//$newscript = substr_replace( $app_json_data->browser_application->loader_script, 'NREUM.info.applicationID=' . $app_json_data->browser_application->id . '; NREUM.info.licenseKey=' . $app_json_data->browser_application->browser_monitoring_key, $index, 0 );
 		$browser_details_array = array(
 			'relic_app_name' => $app_json_data->browser_application->name,
 			'relic_app_key' => $app_json_data->browser_application->browser_monitoring_key,
 			'relic_app_id' => $app_json_data->browser_application->id,
-			'relic_app_script' => $newscript,
+			'relic_app_script' => $app_json_data->browser_application->loader_script,
 		);
 		add_option( 'rtp_relic_browser_details', $browser_details_array );
 		return true;
@@ -208,8 +208,8 @@ function rtp_relic_options_validate( $input )
 
 				/* insert browser monitoring key and browser app id before script ends */
 
-				$index = strpos( $browser_script, '</script>' );
-				$newscript = substr_replace( $browser_script, 'NREUM.info.applicationID=' . $browser_list[0]->id . '; NREUM.info.licenseKey=' . $browser_list[0]->browser_monitoring_key, $index, 0 );
+				//$index = strpos( $browser_script, '</script>' );
+				//$newscript = substr_replace( $browser_script, 'NREUM.info.applicationID=' . $browser_list[0]->id . '; NREUM.info.licenseKey=' . $browser_list[0]->browser_monitoring_key, $index, 0 );
 
 				/* store the browser application details */
 
@@ -217,7 +217,7 @@ function rtp_relic_options_validate( $input )
 					'relic_app_name' => $browser_list[0]->name,
 					'relic_app_key' => $browser_list[0]->browser_monitoring_key,
 					'relic_app_id' => $browser_list[0]->id,
-					'relic_app_script' => $newscript,
+					'relic_app_script' => $browser_script,
 				);
 				add_option( $app_option_name, $browser_array );
 				add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App integrated successfully','rt-new-relic' ), 'updated' );
@@ -291,7 +291,7 @@ function rtp_relic_options_validate( $input )
 					add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App integrated successfully','rt-new-relic' ), 'updated' );
 				}
 			}
-		} else {
+		} else if ( 'rtp-add-account' == $_POST['rtp-relic-form-name'] ) {
 			/* set password to new account */
 			$relic_password = wp_generate_password( 8 );
 
