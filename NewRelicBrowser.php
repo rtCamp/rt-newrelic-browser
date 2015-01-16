@@ -295,38 +295,6 @@ function rtp_relic_options_validate( $input )
 			/* set password to new account */
 			$relic_password = wp_generate_password( 8 );
 
-			/* if the account data is already stored then delete the account */
-			if ( 'rtp-remove-account' == $_POST['rtp-relic-form-name'] ) {
-				/* curl request to remove account */
-				if ( '' != $_POST['rtp-relic-account-id'] ) {
-					if ( isset( $_POST['rtp-relic-account-id'] ) ) {
-						$account_id = sanitize_text_field( $_POST['rtp-relic-account-id'] );
-					}
-					$delete_curl = curl_init();
-					curl_setopt_array(
-						$delete_curl, array(
-						CURLOPT_URL => 'https://rpm.newrelic.com/api/v2/partners/857/accounts/' . $account_id,
-						CURLOPT_CUSTOMREQUEST => 'DELETE',
-						CURLOPT_RETURNTRANSFER => 1,
-						CURLOPT_HTTPHEADER => array( 'x-api-key:6155aee398970036405f017b9f788801ed32f23e208f2d4', 'Content-Type:application/json' ),
-							)
-					);
-					$delete_response = curl_exec( $delete_curl );
-					curl_close( $delete_curl );
-
-					/* delete the stored data */
-
-					delete_option( $option_name );
-					delete_option( $app_option_name );
-					delete_option( $browser_app_list_option );
-				} else {
-					/* delete the stored meta */
-					delete_option( $option_name );
-					delete_option( $app_option_name );
-					delete_option( $browser_app_list_option );
-				}
-				add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App removed successfully','rt-new-relic' ), 'updated' );
-			} else {
 				/* always set allow_api_access to true while creating account
 				  start of API 1 */
 					$relic_account_name = sanitize_text_field( $_POST['relic-account-name'] );
@@ -421,8 +389,38 @@ function rtp_relic_options_validate( $input )
 					} else {
 						add_settings_error( 'relic_options', 'relic_options_error', __( 'Error while creating account','rt-new-relic' ), 'error' );
 					}
+		} else if ( 'rtp-remove-account' == $_POST['rtp-relic-form-name'] ) {
+			/* if the account data is already stored then delete the account */
+				/* curl request to remove account */
+				if ( '' != $_POST['rtp-relic-account-id'] ) {
+					if ( isset( $_POST['rtp-relic-account-id'] ) ) {
+						$account_id = sanitize_text_field( $_POST['rtp-relic-account-id'] );
+					}
+					$delete_curl = curl_init();
+					curl_setopt_array(
+						$delete_curl, array(
+						CURLOPT_URL => 'https://rpm.newrelic.com/api/v2/partners/857/accounts/' . $account_id,
+						CURLOPT_CUSTOMREQUEST => 'DELETE',
+						CURLOPT_RETURNTRANSFER => 1,
+						CURLOPT_HTTPHEADER => array( 'x-api-key:6155aee398970036405f017b9f788801ed32f23e208f2d4', 'Content-Type:application/json' ),
+							)
+					);
+					$delete_response = curl_exec( $delete_curl );
+					curl_close( $delete_curl );
+
+					/* delete the stored data */
+
+					delete_option( $option_name );
+					delete_option( $app_option_name );
+					delete_option( $browser_app_list_option );
+				} else {
+					/* delete the stored meta */
+					delete_option( $option_name );
+					delete_option( $app_option_name );
+					delete_option( $browser_app_list_option );
+				}
+				add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App removed successfully','rt-new-relic' ), 'updated' );
 			}
-		}
 	}
 	return $input;
 }
