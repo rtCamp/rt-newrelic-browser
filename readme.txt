@@ -4,9 +4,9 @@ Donate Link:  http://rtcamp.com/donate
 Tags: new relic browser for wordpress, new relic wordpress, new relic wordpress analytics, new relic wordpress multisite, new relic wordpress mu
 Requires at least: 3.0.1
 Tested up to: 4.1
-Stable tag: 1.0.1
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Stable tag: 1.0.2
+License: MIT
+License URI: http://opensource.org/licenses/mit-license.html
 
 This plugin will allow you to integrate New Relic Browser app in your website.
 
@@ -63,3 +63,6 @@ No worries. You can integrate it again using your API Key.
 = 1.0.1 =
 * Added uninstall.php for clean uninstallation of plugin
 * Updated plugin core file as per updates in New Relic script updates
+
+= 1.0.2 =
+* Escaped the New Relic JS for additional security

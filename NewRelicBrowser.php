@@ -4,10 +4,11 @@
  * Plugin Name: New Relic Browser
  * Plugin URI: http://www.rtcamp.com
  * Description: New Relic Browser Monitoring plugin.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: rtCamp
  * Author URI: http://www.rtcamp.com
- * License:  rt-newrelic-browser
+ * License:  MIT
+ * License URI: http://opensource.org/licenses/mit-license.html
  */
 function rtp_relic_register_settings()
 {
@@ -390,35 +391,10 @@ function rtp_relic_options_validate( $input )
 						add_settings_error( 'relic_options', 'relic_options_error', __( 'Error while creating account','rt-new-relic' ), 'error' );
 					}
 		} else if ( 'rtp-remove-account' == $_POST['rtp-relic-form-name'] ) {
-			/* if the account data is already stored then delete the account */
-				/* curl request to remove account */
-			if ( '' != $_POST['rtp-relic-account-id'] ) {
-				if ( isset( $_POST['rtp-relic-account-id'] ) ) {
-						$account_id = sanitize_text_field( $_POST['rtp-relic-account-id'] );
-				}
-					$delete_curl = curl_init();
-					curl_setopt_array(
-						$delete_curl, array(
-						CURLOPT_URL => 'https://rpm.newrelic.com/api/v2/partners/857/accounts/' . $account_id,
-						CURLOPT_CUSTOMREQUEST => 'DELETE',
-						CURLOPT_RETURNTRANSFER => 1,
-						CURLOPT_HTTPHEADER => array( 'x-api-key:6155aee398970036405f017b9f788801ed32f23e208f2d4', 'Content-Type:application/json' ),
-							)
-					);
-					$delete_response = curl_exec( $delete_curl );
-					curl_close( $delete_curl );
-
-					/* delete the stored data */
-
-					delete_option( $option_name );
-					delete_option( $app_option_name );
-					delete_option( $browser_app_list_option );
-			} else {
 					/* delete the stored meta */
 					delete_option( $option_name );
 					delete_option( $app_option_name );
 					delete_option( $browser_app_list_option );
-			}
 				add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App removed successfully','rt-new-relic' ), 'updated' );
 		}
 	}
@@ -437,7 +413,7 @@ function insert_relic_script()
 	$app_option_name = 'rtp_relic_browser_details';
 	if ( false !== get_option( $app_option_name ) ) {
 		$relic_browser_options_data = get_option( $app_option_name );
-		$output = $relic_browser_options_data['relic_app_script'];
+		$output = esc_js( $relic_browser_options_data['relic_app_script'] );
 		echo $output;
 	}
 }
