@@ -65,4 +65,4 @@ No worries. You can integrate it again using your API Key.
 * Updated plugin core file as per updates in New Relic script updates
 
 = 1.0.2 =
-* Escaped the New Relic JS for additional security
+* Replaced cURL request with WordPress HTTP API, thus removing server side package dependency for plugin users.
