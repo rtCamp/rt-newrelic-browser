@@ -150,7 +150,7 @@ if ( ! class_exists( 'Rt_Newrelic' ) ) {
 			/* send request to create a browser app */
 
 			$app_response = wp_remote_post(
-				'https://staging-api.newrelic.com/v2/browser_applications.json', array(
+				'https://api.newrelic.com/v2/browser_applications.json', array(
 				'timeout' => 100,
 				'method' => 'POST',
 				'headers' => array(
@@ -203,7 +203,7 @@ if ( ! class_exists( 'Rt_Newrelic' ) ) {
 					if ( isset( $_POST['rtp-selected-browser-id'] ) ) {
 						/* In this curl we are filtering browser applications by using browser id */
 
-						$browser_list_response = wp_remote_get( 'https://staging-api.newrelic.com/v2/browser_applications.json?filter[ids]=' . sanitize_text_field( $_POST['rtp-selected-browser-id'] ), array(
+						$browser_list_response = wp_remote_get( 'https://api.newrelic.com/v2/browser_applications.json?filter[ids]=' . sanitize_text_field( $_POST['rtp-selected-browser-id'] ), array(
 							'timeout' => 100,
 							'headers' => array( 'x-api-key' => $rtp_account_details['relic_api_key'], 'Content-Type' => 'application/json' ),
 								)
@@ -254,7 +254,7 @@ if ( ! class_exists( 'Rt_Newrelic' ) ) {
 						$account_api_key = sanitize_text_field( $_POST['rtp-user-api-key'] );
 					}
 
-					$get_browser_response = wp_remote_get( 'https://staging-api.newrelic.com/v2/browser_applications.json', array(
+					$get_browser_response = wp_remote_get( 'https://api.newrelic.com/v2/browser_applications.json', array(
 						'timeout' => 100,
 						'headers' => array( 'x-api-key' => $account_api_key, 'Content-Type' => 'application/json' ),
 							)
@@ -334,11 +334,11 @@ if ( ! class_exists( 'Rt_Newrelic' ) ) {
 					$dataString = json_encode( $data );
 
 					$create_browser_response = wp_remote_post(
-						'https://staging-api.newrelic.com/api/v2/partners/191/accounts', array(
+						'https://rpm.newrelic.com/api/v2/partners/857/accounts', array(
 						'timeout' => 100,
 						'method' => 'POST',
 						'headers' => array(
-							'x-api-key' => 'c9460ac0af2bf54ce2e806cfc502e668db3619bdcf91177',
+							'x-api-key' => '6155aee398970036405f017b9f788801ed32f23e208f2d4',
 							'Content-Type' => 'application/json',
 						),
 						'body' => $dataString,
