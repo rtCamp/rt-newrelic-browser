@@ -1,30 +1,33 @@
 === New Relic Browser by rtCamp ===
 Contributors: rtcamp,newrelic,prasad-nevase,rakshit,rohanveer
 Donate Link:  http://rtcamp.com/donate
-Tags: new relic browser for wordpress, new relic wordpress, new relic wordpress analytics, new relic wordpress multisite, new relic wordpress mu
+Tags: new relic browser for wordpress, new relic wordpress, new relic wordpress analytics, new relic wordpress multisite, new relic wordpress mu, javascript monitoring, javascript errors, browser monitoring
 Requires at least: 3.0.1
 Tested up to: 4.1
 Stable tag: 1.0.2
 License: MIT
 License URI: http://opensource.org/licenses/mit-license.html
 
-This plugin will allow you to integrate New Relic Browser app in your website.
+This plugin instantly adds free New Relic Browser monitoring to your website.
 
 == Description ==
 
-New Relic Browser provides deep visibility and actionable insights into real users experiences on your website.
+[New Relic Browser](http://newrelic.com/browser-monitoring) provides deep visibility and actionable insights into real users experiences on your website.
 With standard page load timing (sometimes referred to as real user monitoring or RUM), New Relic measures the overall time to load the entire webpage.
-However, New Relic Browser goes beyond RUM to also help you monitor the performance of individual sessions, AJAX requests, and JavaScript errorsÃ¢â‚¬â€extending the monitoring throughout the entire life cycle of the page.
+However, New Relic Browser goes beyond RUM to also help you monitor the performance of individual sessions, AJAX requests, and javascript errorsÃ¢â‚¬â€extending the monitoring throughout the entire life cycle of the page.
 
-This plugin will allow you to integrate your New Relic Browser app with your website. If you do not have a New Relic account, then just select "No" and provide the required details. If you already have a New Relic account, then just select "Yes" and provide your account API key. Hit "Submit" and the New Relic script will be loaded automatically in `<head></head>` tag of your site without any manual effort.
+This plugin instantly adds New Relic’s Browser monitoring javascript to your WordPress site. If you do not have a New Relic account, this plugin allows you to instantly create one. If you already have a New Relic account, you’ll be prompted for your New Relic API key to connect your Browser monitoring with your account. Either way, when you complete the super-simple configuration, the latest New Relic Browser monitoring javascript will be loaded automatically in `<head></head>` tag of your site without any manual effort.
+
+New Relic Browser Lite is free for unlimited pageviews. Every new New Relic account includes a two-week free trial of Browser Pro, which offers [many more features](http://newrelic.com/browser-monitoring/pricing) - usage of Browser Pro beyond the trial period is a [paid upgrade](http://newrelic.com/browser-monitoring/pricing). If you don’t upgrade, your account will automatically revert to Browser Lite, for free, forever!
 
 = Features =
 
-* Allows you to create New Relic Account and Browser App a real quick.
-* If you already have New Relic Account then you just have to provide API key of your account and then it will give you options to select existing browser app (if you have any) OR crate a new browser app.
-* You do not need to edit your theme's header file manually to copy the New Relic javascript manually. The plugin does this on the fly.
+* Allows you to create a New Relic Account and Browser App instantly.
+* If you already have New Relic Account, you can select between creating a new Browser app, or connecting your website to an existing browser app.
+* You do not need to edit your theme's header file manually to insert the New Relic Browser javascript, nor do you need to worry about updating the javascript when New Relic releases new versions - this plugin takes care of all that!
 * Compatible with WordPress Multisite.
-* Thoroughly tested on top 10 WordPress opensource themes and plugins in WordPress themes/plugins repository.
+* Thoroughly tested on the top 10-WordPress open source themes and plugins in WordPress themes/plugins repository.
+* Actively supported by rtCamp and New Relic.
 
 **Important Links**
 
@@ -36,24 +39,32 @@ This plugin will allow you to integrate your New Relic Browser app with your web
 * Alternatively, you can [download](http://downloads.wordpress.org/plugin/rt-newrelic-browser.zip "Download New Relic Browser by rtCamp") the plugin from the repository. Unzip it and upload it to the plugins folder of your WordPress installation (`wp-content/plugins/` directory of your WordPress installation).
 * Activate it through the 'Plugins' section.
 * Access the settings page from WordPress backend under `Settings > New Relic Browser`.
+* Once the plugin is configured, wait a minute or two, then login to your New Relic account to see Browser monitoring details.
 
 == Frequently Asked Questions ==
 
 = What if I do not have New Relic account? =
-You can easily create one using this plugin.
+This plugin will create one for you.
 
-= If I have account, then where do I find API Key? =
-In your New Relic account, go to 'Account settings' from top right menu where your username is shown. Then on the next page, select 'Data sharing' from left menu. Make sure you use 'API Key' and not 'Data access key'.
+= If I have a New Relic account, where do I find my API Key? =
+[Here](https://docs.newrelic.com/docs/apm/apis/requirements/api-key#creating)! Make sure to use your 'API Key' and not your ’Data access key'.
 
-= What if I accidentally delete the integrated browser app from backend? =
-No worries. You can integrate it again using your API Key.
+= What if I accidentally disable the plugin and thus disable New Relic Browser monitoring? =
+No worries - simply re-enable the plugin, indicate you have an existing New Relic account, and provide [your API Key](https://docs.newrelic.com/docs/apm/apis/requirements/api-key#creating).
+
+= Something is not working - what do I do? =
+Sorry about that! Please open a [Github Issue](https://github.com/rtCamp/rt-newrelic-browser/issues) or post to this plugin’s [Support section](https://wordpress.org/support/plugin/rt-newrelic-browser).
+
+= Do I have to pay to use New Relic? =
+Nope! New Relic’s services, including [Browser monitoring](http://newrelic.com/browser-monitoring), [APM for your WordPress PHP app](http://newrelic.com/php/wordpress) (and [many other languages](http://newrelic.com/application-monitoring)), [Server monitoring](http://newrelic.com/server-monitoring), [Synthetic monitoring](http://newrelic.com/synthetics), and even [Plugins for your entire stack](http://newrelic.com/platform/), are all available in ‘Lite’ versions for free forever!
+
 
 == Screenshots ==
 
-1. Select if you have New Relic account or not.
-2. If you have New Relic account then select Browser Application as part of next step.
-3. Enter required details if you do not have New Relic account.
-4. Screen showing successful App integration with details.
+1. Select whether or not you have a New Relic account.
+2. If you have a New Relic account, then select an existing Browser Application, or create a new one.
+3. Enter required details to create a New Relic account.
+4. You’ll see this when you are done!
 
 == Changelog ==
 
