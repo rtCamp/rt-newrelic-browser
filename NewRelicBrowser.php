@@ -187,7 +187,6 @@ if ( ! class_exists( 'Rt_Newrelic' ) ) {
 
 			/* validate form if js not worked */
 			$rtp_relic_form_validated = $this->rtp_relic_validate_form( $_POST );
-
 			if ( ! $rtp_relic_form_validated['valid'] ) {
 				/* form not validated throw an error */
 				add_settings_error( 'relic_options', 'relic_options_error', $rtp_relic_form_validated['message'], 'error' );
@@ -302,101 +301,105 @@ if ( ! class_exists( 'Rt_Newrelic' ) ) {
 						add_settings_error( 'relic_options', 'relic_options_error', $browser_app_list->error->title, 'error' );
 					}
 				} else if ( 'rtp-add-account' == $_POST['rtp-relic-form-name'] ) {
-					/* set password to new account */
-					$relic_password = wp_generate_password( 8 );
+					/* check if option already exists */
+					$rtp_account_details_duplicate = get_option( $option_name,false );
+					if ( ! $rtp_account_details_duplicate ){
+						/* set password to new account */
+						$relic_password = wp_generate_password( 8 );
 
-					/* always set allow_api_access to true while creating account
-					  start of API 1 */
-					$relic_account_name = sanitize_text_field( $_POST['relic-account-name'] );
-					$relic_account_email = sanitize_email( $_POST['relic-account-email'] );
-					$relic_first_name = sanitize_text_field( $_POST['relic-first-name'] );
-					$relic_last_name = sanitize_text_field( $_POST['relic-last-name'] );
-					$data = array(
-						'account' => array(
-							'name' => $relic_account_name,
-							'allow_api_access' => true,
-							'testing' => true,
-							'users' => array(
-								array(
-									'email' => $relic_account_email,
-									'password' => $relic_password,
-									'first_name' => $relic_first_name,
-									'last_name' => $relic_last_name,
-									'role' => 'admin',
-									'owner' => 'true',
+						/* always set allow_api_access to true while creating account
+						  start of API 1 */
+						$relic_account_name = sanitize_text_field( $_POST['relic-account-name'] );
+						$relic_account_email = sanitize_email( $_POST['relic-account-email'] );
+						$relic_first_name = sanitize_text_field( $_POST['relic-first-name'] );
+						$relic_last_name = sanitize_text_field( $_POST['relic-last-name'] );
+						$data = array(
+							'account' => array(
+								'name' => $relic_account_name,
+								'allow_api_access' => true,
+								'testing' => true,
+								'users' => array(
+									array(
+										'email' => $relic_account_email,
+										'password' => $relic_password,
+										'first_name' => $relic_first_name,
+										'last_name' => $relic_last_name,
+										'role' => 'admin',
+										'owner' => 'true',
+									),
 								),
+								'subscriptions' => array(),
+							)
+						);
+
+						/* for this api data is to be pass in json */
+						$dataString = json_encode( $data );
+
+						$create_browser_response = wp_remote_post(
+							'https://rpm.newrelic.com/api/v2/partners/857/accounts', array(
+							'timeout' => 100,
+							'method' => 'POST',
+							'headers' => array(
+								'x-api-key' => '6155aee398970036405f017b9f788801ed32f23e208f2d4',
+								'Content-Type' => 'application/json',
 							),
-							'subscriptions' => array(),
-						)
-					);
-
-					/* for this api data is to be pass in json */
-					$dataString = json_encode( $data );
-
-					$create_browser_response = wp_remote_post(
-						'https://rpm.newrelic.com/api/v2/partners/857/accounts', array(
-						'timeout' => 100,
-						'method' => 'POST',
-						'headers' => array(
-							'x-api-key' => '6155aee398970036405f017b9f788801ed32f23e208f2d4',
-							'Content-Type' => 'application/json',
-						),
-						'body' => $dataString,
-							) );
-						$create_browser_response_code = wp_remote_retrieve_response_code( $create_browser_response );
-						$json_data = json_decode( $create_browser_response['body'] );
-						if ( 201 != $create_browser_response_code ) {
-							add_settings_error( 'relic_options', 'relic_options_error', $json_data->error, 'error' );
-						} else if ( isset( $json_data->api_key ) ) {
-							/* store the received data */
-							$main_array = array(
-								'relic_account_name' => $json_data->name,
-								'relic_api_key' => $json_data->api_key,
-								'relic_id' => $json_data->id,
-								'relic_password' => $relic_password,
-							);
-							add_option( $option_name, $main_array );
-								/* end of API 1
-							  Now create the browser app */
-							if ( isset( $_POST['relic-account-name'] ) ) {
-								$relic_account_name = sanitize_text_field( $_POST['relic-account-name'] );
-							}
-							$browser_created = $this->rtp_create_browser_app( $relic_account_name, $json_data->api_key );
-							if ( $browser_created ) {
-								/* mail the account details to user */
-								if ( isset( $_POST['relic-account-email'] ) ) {
-									$relic_user_mail = sanitize_email( $_POST['relic-account-email'] );
-									$browser_app_details = get_option( 'rtp_relic_browser_details' );
-									$relic_subject = 'Welcome to New Relic Browser monitoring of ' . $relic_account_name;
-									$relic_headers = "MIME-Version: 1.0\r\n";
-									$relic_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-									$relic_email_message = '<div style="font-size:15px;margin-top:20px;border:1px solid #666;padding:20px 50px;">
-														<p><h1 style="color:#666;font-weight: 300;margin-top: 10px;">Welcome to New Relic Browser</h1></p>
-														<p>Thanks for adding New Relic Browser monitoring of ' . $relic_account_name . '. Please <a href="https://rpm.newrelic.com/accounts/' . $json_data->id . '/browser/' . $browser_app_details['relic_app_id'] . '">login</a> to your New Relic account and change your temporary password below:</p>
-															<div style="font-size:15px;margin:20px 0;display: inline-block;border:1px solid #666;padding: 15px;">
-																<p style="margin:2px">
-																	<span>Email : </span>
-																	<span><a href="mailto:' . $relic_user_mail . '" target="_blank">' . $relic_user_mail . '</a></span>
-																</p>
-														<p style="margin:2px">
-															<span>Password : </span>
-															<span>' . $relic_password . '</span>
-														</p>
-													</div>
-													<p style="margin-top:20px">
-													For help on getting started with New Relic Browser, please visit <a href="https://docs.newrelic.com/docs/browser/new-relic-browser">https://docs.newrelic.com/docs/browser/new-relic-browser</a> and <a href="https://discuss.newrelic.com/c/browser">https://discuss.newrelic.com/c/browser</a>
-													</p>
-													<p style="margin-top:20px">
-													Be sure to start your 14-day free trial of New Relic Browser Pro by clicking the "Activate" button on <a href="https://rpm.newrelic.com/accounts/' . $json_data->id . '/browser/' . $browser_app_details['relic_app_id'] . '">https://rpm.newrelic.com/accounts/' . $json_data->id . '/browser/' . $browser_app_details['relic_app_id'] . '</a> After 15 days, if you choose to not upgrade to New Relic Browser Pro, your account will switch to Browser Lite, which you can use for free, forever!
-													</p>
-													</div>';
-									wp_mail( $relic_user_mail, $relic_subject, $relic_email_message, $relic_headers );
+							'body' => $dataString,
+								) );
+							$create_browser_response_code = wp_remote_retrieve_response_code( $create_browser_response );
+							$json_data = json_decode( $create_browser_response['body'] );
+							if ( 201 != $create_browser_response_code ) {
+								add_settings_error( 'relic_options', 'relic_options_error', $json_data->error, 'error' );
+							} else if ( isset( $json_data->api_key ) ) {
+								/* store the received data */
+								$main_array = array(
+									'relic_account_name' => $json_data->name,
+									'relic_api_key' => $json_data->api_key,
+									'relic_id' => $json_data->id,
+									'relic_password' => $relic_password,
+								);
+								add_option( $option_name, $main_array );
+									/* end of API 1
+								  Now create the browser app */
+								if ( isset( $_POST['relic-account-name'] ) ) {
+									$relic_account_name = sanitize_text_field( $_POST['relic-account-name'] );
 								}
-								add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App integrated successfully', 'rt-new-relic' ), 'updated' );
+								$browser_created = $this->rtp_create_browser_app( $relic_account_name, $json_data->api_key );
+								if ( $browser_created ) {
+									/* mail the account details to user */
+									if ( isset( $_POST['relic-account-email'] ) ) {
+										$relic_user_mail = sanitize_email( $_POST['relic-account-email'] );
+										$browser_app_details = get_option( 'rtp_relic_browser_details' );
+										$relic_subject = 'Welcome to New Relic Browser monitoring of ' . $relic_account_name;
+										$relic_headers = "MIME-Version: 1.0\r\n";
+										$relic_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+										$relic_email_message = '<div style="font-size:15px;margin-top:20px;border:1px solid #666;padding:20px 50px;">
+															<p><h1 style="color:#666;font-weight: 300;margin-top: 10px;">Welcome to New Relic Browser</h1></p>
+															<p>Thanks for adding New Relic Browser monitoring of ' . $relic_account_name . '. Please <a href="https://rpm.newrelic.com/accounts/' . $json_data->id . '/browser/' . $browser_app_details['relic_app_id'] . '">login</a> to your New Relic account and change your temporary password below:</p>
+																<div style="font-size:15px;margin:20px 0;display: inline-block;border:1px solid #666;padding: 15px;">
+																	<p style="margin:2px">
+																		<span>Email : </span>
+																		<span><a href="mailto:' . $relic_user_mail . '" target="_blank">' . $relic_user_mail . '</a></span>
+																	</p>
+															<p style="margin:2px">
+																<span>Password : </span>
+																<span>' . $relic_password . '</span>
+															</p>
+														</div>
+														<p style="margin-top:20px">
+														For help on getting started with New Relic Browser, please visit <a href="https://docs.newrelic.com/docs/browser/new-relic-browser">https://docs.newrelic.com/docs/browser/new-relic-browser</a> and <a href="https://discuss.newrelic.com/c/browser">https://discuss.newrelic.com/c/browser</a>
+														</p>
+														<p style="margin-top:20px">
+														Be sure to start your 14-day free trial of New Relic Browser Pro by clicking the "Activate" button on <a href="https://rpm.newrelic.com/accounts/' . $json_data->id . '/browser/' . $browser_app_details['relic_app_id'] . '">https://rpm.newrelic.com/accounts/' . $json_data->id . '/browser/' . $browser_app_details['relic_app_id'] . '</a> After 15 days, if you choose to not upgrade to New Relic Browser Pro, your account will switch to Browser Lite, which you can use for free, forever!
+														</p>
+														</div>';
+										wp_mail( $relic_user_mail, $relic_subject, $relic_email_message, $relic_headers );
+									}
+									add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App integrated successfully', 'rt-new-relic' ), 'updated' );
+								}
+							} else {
+								add_settings_error( 'relic_options', 'relic_options_error', __( 'Error while creating account', 'rt-new-relic' ), 'error' );
 							}
-						} else {
-							add_settings_error( 'relic_options', 'relic_options_error', __( 'Error while creating account', 'rt-new-relic' ), 'error' );
-						}
+					} // end if
 				} else if ( 'rtp-remove-account' == $_POST['rtp-relic-form-name'] ) {
 					/* delete the stored data */
 					delete_option( $option_name );
