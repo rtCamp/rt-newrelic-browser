@@ -10,14 +10,14 @@
  * @package 	WooCommerce/Uninstaller
  * @version     2.1.0
  */
-if ( !defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit();
 }
 global $wpdb, $wp_roles;
 $option_name = 'rtp_relic_account_details';
 $app_option_name = 'rtp_relic_browser_details';
 $browser_app_list = 'rtp_relic_browser_list';
-if ( !is_multisite() ) {
+if ( ! is_multisite() ) {
 	delete_option( $option_name );
 	delete_option( $browser_app_list );
 	delete_option( $app_option_name );
