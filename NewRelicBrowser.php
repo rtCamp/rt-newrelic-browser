@@ -248,57 +248,61 @@ if ( ! class_exists( 'Rt_Newrelic' ) ) {
 						add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App integrated successfully', 'rt-new-relic' ), 'updated' );
 					}
 				} else if ( 'rtp-get-browser' == $_POST['rtp-relic-form-name'] ) {
-					/* get the list of browser apps */
-					if ( isset( $_POST['rtp-user-api-key'] ) ) {
-						$account_api_key = sanitize_text_field( $_POST['rtp-user-api-key'] );
-					}
+					/* check to see if option already exists */
+					$is_get_browser_exists = get_option( 'rtp_relic_browser_list',false );
+					if ( ! $is_get_browser_exists ) {
+						/* get the list of browser apps */
+						if ( isset( $_POST['rtp-user-api-key'] ) ) {
+							$account_api_key = sanitize_text_field( $_POST['rtp-user-api-key'] );
+						}
 
-					$get_browser_response = wp_remote_get( 'https://api.newrelic.com/v2/browser_applications.json', array(
-						'timeout' => 100,
-						'headers' => array( 'x-api-key' => $account_api_key, 'Content-Type' => 'application/json' ),
-							)
-					);
+						$get_browser_response = wp_remote_get( 'https://api.newrelic.com/v2/browser_applications.json', array(
+							'timeout' => 100,
+							'headers' => array( 'x-api-key' => $account_api_key, 'Content-Type' => 'application/json' ),
+								)
+						);
 
-					$get_browser_response_code = wp_remote_retrieve_response_code( $get_browser_response );
-					$browser_app_list = json_decode( $get_browser_response['body'] );
-					if ( 200 == $get_browser_response_code ) {
-						if ( ! empty( $browser_app_list->browser_applications ) ) {
-							$browser_app_array = array();
-							foreach ( $browser_app_list->browser_applications as $key => $app_data ) {
-								$app_data_array = array(
-									'browser_id' => $app_data->id,
-									'browser_name' => $app_data->name,
-								);
-								array_push( $browser_app_array, $app_data_array );
-							}
+						$get_browser_response_code = wp_remote_retrieve_response_code( $get_browser_response );
+						$browser_app_list = json_decode( $get_browser_response['body'] );
+						if ( 200 == $get_browser_response_code ) {
+							if ( ! empty( $browser_app_list->browser_applications ) ) {
+								$browser_app_array = array();
+								foreach ( $browser_app_list->browser_applications as $key => $app_data ) {
+									$app_data_array = array(
+										'browser_id' => $app_data->id,
+										'browser_name' => $app_data->name,
+									);
+									array_push( $browser_app_array, $app_data_array );
+								}
 
-							/* store the browsers list */
+								/* store the browsers list */
 
-							add_option( 'rtp_relic_browser_list', $browser_app_array );
+								add_option( 'rtp_relic_browser_list', $browser_app_array );
 
-							/* store the account details */
+								/* store the account details */
 
-							$main_array = array(
-								'relic_api_key' => $account_api_key,
-							);
-							add_option( $option_name, $main_array );
-							add_settings_error( 'relic_options', 'relic_options_error', __( 'Select Browser Application', 'rt-new-relic' ), 'updated' );
-						} else {
-							/* create a browser app as the account doesn't contain any app */
-							if ( isset( $_SERVER['SERVER_NAME'] ) ) {
-								$browser_created = $this->rtp_create_browser_app( sanitize_text_field( $_SERVER['SERVER_NAME'] ), $account_api_key );
-							}
-							/* store the account details */
-							if ( $browser_created ) {
-								$account_details_array = array(
+								$main_array = array(
 									'relic_api_key' => $account_api_key,
 								);
-								add_option( $option_name, $account_details_array );
-								add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App integrated successfully', 'rt-new-relic' ), 'updated' );
+								add_option( $option_name, $main_array );
+								add_settings_error( 'relic_options', 'relic_options_error', __( 'Select Browser Application', 'rt-new-relic' ), 'updated' );
+							} else {
+								/* create a browser app as the account doesn't contain any app */
+								if ( isset( $_SERVER['SERVER_NAME'] ) ) {
+									$browser_created = $this->rtp_create_browser_app( sanitize_text_field( $_SERVER['SERVER_NAME'] ), $account_api_key );
+								}
+								/* store the account details */
+								if ( $browser_created ) {
+									$account_details_array = array(
+										'relic_api_key' => $account_api_key,
+									);
+									add_option( $option_name, $account_details_array );
+									add_settings_error( 'relic_options', 'relic_options_error', __( 'New Relic Browser App integrated successfully', 'rt-new-relic' ), 'updated' );
+								}
 							}
+						} else {
+							add_settings_error( 'relic_options', 'relic_options_error', $browser_app_list->error->title, 'error' );
 						}
-					} else {
-						add_settings_error( 'relic_options', 'relic_options_error', $browser_app_list->error->title, 'error' );
 					}
 				} else if ( 'rtp-add-account' == $_POST['rtp-relic-form-name'] ) {
 					/* check if option already exists */
