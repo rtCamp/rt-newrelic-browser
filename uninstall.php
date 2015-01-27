@@ -22,7 +22,6 @@ if ( ! is_multisite() ) {
 	delete_option( $browser_app_list );
 	delete_option( $app_option_name );
 } else {
-	global $wpdb;
 	$blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
 	$original_blog_id = get_current_blog_id();
 
