@@ -4,12 +4,23 @@
  * Plugin Name: New Relic Browser
  * Plugin URI: http://www.rtcamp.com
  * Description: New Relic Browser Monitoring plugin.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: rtCamp
  * Author URI: http://www.rtcamp.com
  * License:  MIT
  * License URI: http://opensource.org/licenses/mit-license.html
  */
+
+if ( ! defined( 'RTP_NEW_RELIC_API_KEY' ) ){
+	define( 'RTP_NEW_RELIC_API_KEY', '6155aee398970036405f017b9f788801ed32f23e208f2d4' );
+}
+if ( ! define( 'RTP_NEW_RELIC_API_URL' ) ){
+	define( 'RTP_NEW_RELIC_API_URL', 'https://rpm.newrelic.com/api/v2/partners/857/accounts' );
+}
+if ( ! defined( 'RTP_NEW_RELIC_BROWSER_URL' ) ){
+	define( 'RTP_NEW_RELIC_BROWSER_URL', 'https://api.newrelic.com/v2/browser_applications.json' );
+}
+
 if ( ! class_exists( 'Rt_Newrelic' ) ) {
 
 	Class Rt_Newrelic {
@@ -150,7 +161,7 @@ if ( ! class_exists( 'Rt_Newrelic' ) ) {
 			/* send request to create a browser app */
 
 			$app_response = wp_remote_post(
-				'https://api.newrelic.com/v2/browser_applications.json', array(
+				RTP_NEW_RELIC_BROWSER_URL, array(
 				'timeout' => 100,
 				'method' => 'POST',
 				'headers' => array(
@@ -202,7 +213,7 @@ if ( ! class_exists( 'Rt_Newrelic' ) ) {
 					if ( isset( $_POST['rtp-selected-browser-id'] ) ) {
 						/* In this curl we are filtering browser applications by using browser id */
 
-						$browser_list_response = wp_remote_get( 'https://api.newrelic.com/v2/browser_applications.json?filter[ids]=' . sanitize_text_field( $_POST['rtp-selected-browser-id'] ), array(
+						$browser_list_response = wp_remote_get( RTP_NEW_RELIC_BROWSER_URL.'?filter[ids]=' . sanitize_text_field( $_POST['rtp-selected-browser-id'] ), array(
 							'timeout' => 100,
 							'headers' => array( 'x-api-key' => $rtp_account_details['relic_api_key'], 'Content-Type' => 'application/json' ),
 								)
@@ -256,7 +267,7 @@ if ( ! class_exists( 'Rt_Newrelic' ) ) {
 							$account_api_key = sanitize_text_field( $_POST['rtp-user-api-key'] );
 						}
 
-						$get_browser_response = wp_remote_get( 'https://api.newrelic.com/v2/browser_applications.json', array(
+						$get_browser_response = wp_remote_get( RTP_NEW_RELIC_BROWSER_URL, array(
 							'timeout' => 100,
 							'headers' => array( 'x-api-key' => $account_api_key, 'Content-Type' => 'application/json' ),
 								)
@@ -340,11 +351,11 @@ if ( ! class_exists( 'Rt_Newrelic' ) ) {
 						$dataString = json_encode( $data );
 
 						$create_browser_response = wp_remote_post(
-							'https://rpm.newrelic.com/api/v2/partners/857/accounts', array(
+							RTP_NEW_RELIC_API_URL, array(
 							'timeout' => 100,
 							'method' => 'POST',
 							'headers' => array(
-								'x-api-key' => '6155aee398970036405f017b9f788801ed32f23e208f2d4',
+								'x-api-key' => RTP_NEW_RELIC_API_KEY,
 								'Content-Type' => 'application/json',
 							),
 							'body' => $dataString,

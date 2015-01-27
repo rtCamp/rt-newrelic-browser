@@ -4,7 +4,7 @@ Donate Link:  http://rtcamp.com/donate
 Tags: new relic browser for wordpress, new relic wordpress, new relic wordpress analytics, new relic wordpress multisite, new relic wordpress mu, javascript monitoring, javascript errors, browser monitoring
 Requires at least: 3.0.1
 Tested up to: 4.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: MIT
 License URI: http://opensource.org/licenses/mit-license.html
 
@@ -77,3 +77,7 @@ Nope! New Relic’s services, including [Browser monitoring](http://newrelic.com
 
 = 1.0.2 =
 * Replaced cURL request with WordPress HTTP API, thus removing server side package dependency for plugin users.
+
+= 1.0.3 =
+* Added constants for URL.
+* Updated uninstall.php to support WordPress Multisite.
