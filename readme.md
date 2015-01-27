@@ -84,4 +84,8 @@ Nope! New Relic’s services, including [Browser monitoring](http://newrelic.com
 ### 1.0.2 ###
 * Replaced cURL request with WordPress HTTP API, thus removing server side package dependency for plugin users.
 
+### 1.0.3 ###
+* Added constants for URL.
+* Updated uninstall.php to support clean uninstallation on WordPress Multisite.
+
 
