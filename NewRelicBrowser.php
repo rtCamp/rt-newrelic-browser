@@ -14,7 +14,7 @@
 if ( ! defined( 'RTP_NEW_RELIC_API_KEY' ) ){
 	define( 'RTP_NEW_RELIC_API_KEY', '6155aee398970036405f017b9f788801ed32f23e208f2d4' );
 }
-if ( ! define( 'RTP_NEW_RELIC_API_URL' ) ){
+if ( ! defined( 'RTP_NEW_RELIC_API_URL' ) ){
 	define( 'RTP_NEW_RELIC_API_URL', 'https://rpm.newrelic.com/api/v2/partners/857/accounts' );
 }
 if ( ! defined( 'RTP_NEW_RELIC_BROWSER_URL' ) ){
