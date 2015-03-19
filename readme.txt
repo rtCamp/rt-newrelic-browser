@@ -14,7 +14,7 @@ This plugin instantly adds free New Relic Browser monitoring to your website.
 
 [New Relic Browser](http://newrelic.com/browser-monitoring) provides deep visibility and actionable insights into real users experiences on your website.
 With standard page load timing (sometimes referred to as real user monitoring or RUM), New Relic measures the overall time to load the entire webpage.
-However, New Relic Browser goes beyond RUM to also help you monitor the performance of individual sessions, AJAX requests, and javascript errorsÃ¢â‚¬â€extending the monitoring throughout the entire life cycle of the page.
+However, New Relic Browser goes beyond RUM to also help you monitor the performance of individual sessions, AJAX requests, and javascript errors extending the monitoring throughout the entire life cycle of the page.
 
 This plugin instantly adds New Relic’s Browser monitoring javascript to your WordPress site. If you do not have a New Relic account, this plugin allows you to instantly create one. If you already have a New Relic account, you’ll be prompted for your New Relic API key to connect your Browser monitoring with your account. Either way, when you complete the super-simple configuration, the latest New Relic Browser monitoring javascript will be loaded automatically in `<head></head>` tag of your site without any manual effort.
 
