@@ -332,7 +332,7 @@ if ( ! class_exists( 'Rt_Newrelic' ) ) {
 							'account' => array(
 								'name' => $relic_account_name,
 								'allow_api_access' => true,
-								'testing' => true,
+								'testing' => false,
 								'users' => array(
 									array(
 										'email' => $relic_account_email,
