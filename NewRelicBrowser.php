@@ -4,7 +4,7 @@
  * Plugin Name: New Relic Browser
  * Plugin URI: http://www.rtcamp.com
  * Description: New Relic Browser Monitoring plugin.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: rtCamp
  * Author URI: http://www.rtcamp.com
  * License:  MIT
