@@ -3,7 +3,7 @@ Contributors: rtcamp,newrelic,prasad-nevase,rakshit,rohanveer
 Donate Link:  http://rtcamp.com/donate
 Tags: new relic browser for wordpress, new relic wordpress, new relic wordpress analytics, new relic wordpress multisite, new relic wordpress mu, javascript monitoring, javascript errors, browser monitoring
 Requires at least: 3.0.1
-Tested up to: 4.1
+Tested up to: 4.2
 Stable tag: 1.0.4
 License: MIT
 License URI: http://opensource.org/licenses/mit-license.html
