@@ -84,7 +84,7 @@
 							<th scope="row"><label for="rtp-user-api-key">Account API Key<span class="description"> (required)</span></label></th>
 							<td>
 								<input type="text" name="rtp-user-api-key" id="rtp-user-api-key" class="regular-text">
-								<p class="description">API key can be found in the "Data sharing" section of "Account settings".</p>
+								<p class="description">API key can be found in the "API keys" section of "Account settings".</p>
 								<span id="rtp-user-api-key_error" class="form_error"></span>
 							</td>
 						</tr>
