@@ -81,3 +81,9 @@ Nope! New Relic’s services, including [Browser monitoring](http://newrelic.com
 #### 1.0.3 ####
 * Added constants for URL.
 * Updated uninstall.php to support clean uninstallation on WordPress Multisite.
+
+#### 1.0.4 ####
+* Changed testing flag to false.
+
+#### 1.0.5 ####
+* Updated API Key Location in description.
