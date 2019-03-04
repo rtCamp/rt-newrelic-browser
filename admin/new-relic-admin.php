@@ -166,7 +166,7 @@
 			if ( array_key_exists( 'relic_id', $relic_options_data ) ) {
 				$relic_login_url = 'https://rpm.newrelic.com/accounts/' . $relic_options_data['relic_id'] . '/browser/' . $relic_browser_options_data['relic_app_id'];
 
-				$relic_email_check_msg = __( ' Check your email for more details.', 'rt-new-relic' );
+				$relic_email_check_msg = esc_html__( ' Check your email for more details.', 'rt-new-relic' );
 			} else {
 				$relic_login_url = 'https://rpm.newrelic.com/login';
 
