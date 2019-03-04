@@ -1,33 +1,86 @@
 <?php
+/**
+ * Lightweight WordPress readme.txt parser and converter to Markdown
+ * The WordPress-Plugin-Readme-Parser project is too heavy and has too many dependencies for what we need (we don't need conversion to HTML)
+ *
+ * @package NewRelicBrowser
+ */
 
 /**
  * Lightweight WordPress readme.txt parser and converter to Markdown
  * The WordPress-Plugin-Readme-Parser project is too heavy and has too many dependencies for what we need (we don't need conversion to HTML)
+ *
  * @link https://github.com/markjaquith/WordPress-Plugin-Readme-Parser Alternative to WordPress-Plugin-Readme-Parser
  * @version 1.1.1
  * @author Udit Desai <desaiuditd@gmail.com>
  * @license GPLv2+
  */
 class WordPress_Readme_Parser {
+	/**
+	 * Class Member variable for path.
+	 *
+	 * @var string $path
+	 */
 	public $path;
+
+	/**
+	 * Class Member variable for source.
+	 *
+	 * @var string $source
+	 */
 	public $source;
+
+	/**
+	 * Class Member variable for title.
+	 *
+	 * @var string $title
+	 */
 	public $title = '';
+
+	/**
+	 * Class Member variable for short description.
+	 *
+	 * @var string $short_description
+	 */
 	public $short_description = '';
+
+	/**
+	 * Class Member variable for metadata array.
+	 *
+	 * @var string $metadata
+	 */
 	public $metadata = array();
+
+	/**
+	 * Class Member variable for sections array.
+	 *
+	 * @var string $sections
+	 */
 	public $sections = array();
 
-	function __construct( $args = array() ) {
+	/**
+	 * Class Costructor.
+	 *
+	 * @param array $args Arguments.
+	 *
+	 * @throws Exception Throws the exception.
+	 *
+	 * @return void
+	 */
+	public function __construct( $args = array() ) {
 		$args = array_merge( get_object_vars( $this ), $args );
 		foreach ( $args as $key => $value ) {
 			$this->$key = $value;
 		}
 
-		$this->source = file_get_contents( $this->path );
+		$remote_request = wp_remote_get( $this->path );
+
+		$this->source = wp_remote_retrieve_body( $remote_request );
 		if ( ! $this->source ) {
 			throw new Exception( 'readme.txt was empty or unreadable' );
 		}
 
-		// Parse metadata
+		// Parse metadata.
 		$syntax_ok = preg_match( '/^=== (.+?) ===\n(.+?)\n\n(.+?)\n(.+)/s', $this->source, $matches );
 		if ( ! $syntax_ok ) {
 			throw new Exception( 'Malformed metadata block' );
@@ -41,6 +94,7 @@ class WordPress_Readme_Parser {
 				throw new Exception( "Parse error in $metadatum" );
 			}
 			list( $name, $value ) = array_slice( $metadataum_matches, 1, 2 );
+
 			$this->metadata[ $name ] = $value;
 		}
 		$this->metadata['Contributors'] = preg_split( '/\s*,\s*/', $this->metadata['Contributors'] );
@@ -58,13 +112,15 @@ class WordPress_Readme_Parser {
 			$subsections = array();
 
 			// @todo Parse out front matter /(.+?)(\n=\s+.+$)/s
-
 			// Parse subsections
 			if ( preg_match_all( '/(?:^|\n)= (.+?) =\n(.+?)(?=\n= |$)/s', $body, $subsection_matches, PREG_SET_ORDER ) ) {
 				$body = null;
 				foreach ( $subsection_matches as $subsection_match ) {
 					array_shift( $subsection_match );
-					$subsections[] = array( 'heading' => array_shift( $subsection_match ), 'body' => trim( array_shift( $subsection_match ) ), );
+					$subsections[] = array(
+						'heading' => array_shift( $subsection_match ),
+						'body'    => trim( array_shift( $subsection_match ) ),
+					);
 				}
 			}
 
@@ -75,11 +131,11 @@ class WordPress_Readme_Parser {
 	/**
 	 * Convert the parsed readme.txt into Markdown
 	 *
-	 * @param array|string [$params]
+	 * @param array $params Parameter.
 	 *
 	 * @return string
 	 */
-	function to_markdown( $params = array() ) {
+	public function to_markdown( $params = array() ) {
 
 		$general_section_formatter = function ( $body ) use ( $params ) {
 			$body = preg_replace( '#\[youtube\s+(?:http://www\.youtube\.com/watch\?v=|http://youtu\.be/)(.+?)\]#', '[![Play video on YouTube](http://i1.ytimg.com/vi/$1/hqdefault.jpg)](http://www.youtube.com/watch?v=$1)', $body );
@@ -87,7 +143,7 @@ class WordPress_Readme_Parser {
 			return $body;
 		};
 
-		// Parse sections
+		// Parse sections.
 		$section_formatters = array(
 			'Description' => function ( $body ) use ( $params ) {
 				if ( isset( $params['travis_ci_url'] ) ) {
@@ -95,8 +151,10 @@ class WordPress_Readme_Parser {
 				}
 
 				return $body;
-			}, 'Screenshots'                       => function ( $body ) {
-				$body     = trim( $body );
+			},
+			'Screenshots' => function ( $body ) {
+				$body = trim( $body );
+
 				$new_body = '';
 				if ( ! preg_match_all( '/^\d+\. (.+?)$/m', $body, $screenshot_matches, PREG_SET_ORDER ) ) {
 					throw new Exception( 'Malformed screenshot section' );
@@ -123,26 +181,42 @@ class WordPress_Readme_Parser {
 				}
 
 				return $new_body;
-			}, );
+			},
+		);
 
-		// Format metadata
-		$formatted_metadata                 = $this->metadata;
-		$formatted_metadata['Contributors'] = join( ', ', array_map( function ( $contributor ) {
-													$contributor = strtolower( $contributor );
-													// @todo Map to GitHub account
-													return sprintf( '[%1$s](http://profiles.wordpress.org/%1$s)', $contributor );
-		}, $this->metadata['Contributors'] ) );
-		$formatted_metadata['Tags']         = join( ', ', array_map( function ( $tag ) {
-													return sprintf( '[%1$s](http://wordpress.org/plugins/tags/%1$s)', $tag );
-		}, $this->metadata['Tags'] ) );
-		$formatted_metadata['License']      = sprintf( '[%s](%s)', $formatted_metadata['License'], $formatted_metadata['License URI'] );
+		// Format metadata.
+		$formatted_metadata = $this->metadata;
+
+		$formatted_metadata['Contributors'] = join(
+			', ',
+			array_map(
+				function ( $contributor ) {
+					$contributor = strtolower( $contributor );
+					// @todo Map to GitHub account
+					return sprintf( '[%1$s](http://profiles.wordpress.org/%1$s)', $contributor );
+				},
+				$this->metadata['Contributors']
+			)
+		);
+
+		$formatted_metadata['Tags'] = join(
+			', ',
+			array_map(
+				function ( $tag ) {
+					return sprintf( '[%1$s](http://wordpress.org/plugins/tags/%1$s)', $tag );
+				},
+				$this->metadata['Tags']
+			)
+		);
+
+		$formatted_metadata['License'] = sprintf( '[%s](%s)', $formatted_metadata['License'], $formatted_metadata['License URI'] );
 		unset( $formatted_metadata['License URI'] );
 		if ( 'trunk' === $this->metadata['Stable tag'] ) {
 			$formatted_metadata['Stable tag'] .= ' (master)';
 		}
 
-		// Render metadata
-		$markdown = "<!-- DO NOT EDIT THIS FILE; it is auto-generated from readme.txt -->\n";
+		// Render metadata.
+		$markdown  = "<!-- DO NOT EDIT THIS FILE; it is auto-generated from readme.txt -->\n";
 		$markdown .= sprintf( "# %s\n", $this->title );
 		$markdown .= "\n";
 		if ( file_exists( 'assets/banner-1544x500.jpg' ) ) {
