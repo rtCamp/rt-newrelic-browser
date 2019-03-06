@@ -14,8 +14,6 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit();
 }
 
-global $wpdb;
-
 $option_name      = 'rtp_relic_account_details';
 $app_option_name  = 'rtp_relic_browser_details';
 $browser_app_list = 'rtp_relic_browser_list';
