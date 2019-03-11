@@ -96,28 +96,22 @@ if ( ! class_exists( 'Rt_Newrelic' ) ) {
 		 * @return void
 		 */
 		public function rtp_relic_page_help() {
+			$overview_content  = esc_html__( 'This page will allow you to integrate your New Relic Browser app with your website. If you do not have New Relic account, then just select "No" and provide required details. The New Relic script will be loaded automatically in &lt;head&gt; tag of your site without any manual effort.', 'rt-new-relic' );
+			$new_relic_content = esc_html__( 'New Relic Browser provides deep visibility and actionable insights into real users experiences on your website. With standard page load timing (sometimes referred to as real user monitoring or RUM), New Relic measures the overall time to load the entire webpage. However, New Relic Browser goes beyond RUM to also help you monitor the performance of individual sessions, AJAX requests, and JavaScript errors—extending the monitoring throughout the entire life cycle of the page.', 'rt-new-relic' );
+
 			$screen = get_current_screen();
 			$screen->add_help_tab(
 				array(
 					'id'      => 'rtp_relic_page_overview_tab',
 					'title'   => esc_html__( 'Overview', 'rt-new-relic' ),
-					'content' => '<p>' . esc_html__(
-						'This page will allow you to integrate your New Relic Browser app with your website. 
-							If you do not have New Relic account, then just select "No" and provide required details. The New Relic script will be loaded automatically in &lt;head&gt; tag of your site without any manual effort.',
-						'rt-new-relic'
-					) . '</p>',
+					'content' => sprintf( '<p>%s</p>', $overview_content ),
 				)
 			);
 			$screen->add_help_tab(
 				array(
 					'id'      => 'rtp_relic_page_about_tab',
 					'title'   => esc_html__( 'New Relic Browser', 'rt-new-relic' ),
-					'content' => '<p>' . esc_html__(
-						'New Relic Browser provides deep visibility and actionable insights into real users experiences on your website. 
-						With standard page load timing (sometimes referred to as real user monitoring or RUM), New Relic measures the overall time to load the entire webpage. 
-						However, New Relic Browser goes beyond RUM to also help you monitor the performance of individual sessions, AJAX requests, and JavaScript errors—extending the monitoring throughout the entire life cycle of the page.',
-						'rt-new-relic'
-					) . '</p>',
+					'content' => sprintf( '<p>%s</p>', $new_relic_content ),
 				)
 			);
 		}

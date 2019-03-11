@@ -85,7 +85,8 @@
 									<span id="rtp-relic-browser-name_error" class="form_error"></span>
 								</td>
 							</tr>
-						</tbody></table>
+						</tbody>
+					</table>
 					<input type="hidden" value="rtp-create-browser" name="rtp-relic-form-name">
 					<p class="submit">
 						<input class="button-primary" type="submit" value="<?php esc_attr_e( 'Submit', 'rt-new-relic' ); ?>" name="rtp-relic-get-browser-submit">
@@ -212,8 +213,8 @@
 				<p><b><?php esc_html_e( 'Browser Monitoring Key', 'rt-new-relic' ); ?></b> = <?php echo esc_html( $relic_browser_options_data['relic_app_key'] ); ?></p>
 				<p><b><?php esc_html_e( 'Browser App ID', 'rt-new-relic' ); ?></b> = <?php echo esc_html( $relic_browser_options_data['relic_app_id'] ); ?></p>
 			</div>
-			<div id="rtp-dialog-confirm" title="Remove Account" class="hidden">
-				<p><b>Are you sure?</b></p>
+			<div id="rtp-dialog-confirm" title="<?php esc_html_e( 'Remove Account', 'rt-new-relic' ); ?>" class="hidden">
+				<p><b><?php esc_html_e( 'Are you sure?', 'rt-new-relic' ); ?></b></p>
 			</div>
 			<form id="rtp-relic-remove-account" action="options.php" method="POST" enctype="multipart/form-data">
 
