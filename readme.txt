@@ -10,24 +10,19 @@ License URI: http://opensource.org/licenses/mit-license.html
 
 This plugin instantly adds free New Relic Browser monitoring to your website.
 
+⚠️ **This plugin will be retired soon.**  
+The New Relic PHP Agent now manages all functionalities without requiring this plugin. For continued performance tracking, configure the New Relic PHP Agent.
+
 == Description ==
 
-[New Relic Browser](http://newrelic.com/browser-monitoring) provides deep visibility and actionable insights into real users experiences on your website.
-With standard page load timing (sometimes referred to as real user monitoring or RUM), New Relic measures the overall time to load the entire webpage.
-However, New Relic Browser goes beyond RUM to also help you monitor the performance of individual sessions, AJAX requests, and javascript errors extending the monitoring throughout the entire life cycle of the page.
+**New Notice:**  
+The New Relic PHP Agent eliminates the need for this plugin by capturing and reporting key metrics directly to the APM dashboard.
+
+= Previous Details (For Reference) =
 
 This plugin instantly adds New Relic’s Browser monitoring javascript to your WordPress site. If you do not have a New Relic account, this plugin allows you to instantly create one. If you already have a New Relic account, you’ll be prompted for your New Relic API key to connect your Browser monitoring with your account. Either way, when you complete the super-simple configuration, the latest New Relic Browser monitoring javascript will be loaded automatically in `<head></head>` tag of your site without any manual effort.
 
 New Relic Browser Lite is free for unlimited pageviews. Every new New Relic account includes a two-week free trial of Browser Pro, which offers [many more features](http://newrelic.com/browser-monitoring/pricing) - usage of Browser Pro beyond the trial period is a [paid upgrade](http://newrelic.com/browser-monitoring/pricing). If you don’t upgrade, your account will automatically revert to Browser Lite, for free, forever!
-
-= Features =
-
-* Allows you to create a New Relic Account and Browser App instantly.
-* If you already have New Relic Account, you can select between creating a new Browser app, or connecting your website to an existing browser app.
-* You do not need to edit your theme's header file manually to insert the New Relic Browser javascript, nor do you need to worry about updating the javascript when New Relic releases new versions - this plugin takes care of all that!
-* Compatible with WordPress Multisite.
-* Thoroughly tested on the top 10-WordPress open source themes and plugins in WordPress themes/plugins repository.
-* Actively supported by rtCamp and New Relic.
 
 **Important Links**
 
@@ -43,21 +38,25 @@ New Relic Browser Lite is free for unlimited pageviews. Every new New Relic acco
 
 == Frequently Asked Questions ==
 
-= What if I do not have New Relic account? =
-This plugin will create one for you.
+= What’s changing with this plugin? =
+This plugin is being retired because the New Relic PHP Agent now automatically captures and reports performance metrics directly.
 
-= If I have a New Relic account, where do I find my API Key? =
-[Here](https://docs.newrelic.com/docs/apm/apis/requirements/api-key#creating)! Make sure to use your 'API Key' and not your ’Data access key'.
+= How do I continue to use New Relic Browser monitoring? =  
+Configure the New Relic PHP Agent on your server following New Relic's official [documentation](https://docs.newrelic.com).
 
-= What if I accidentally disable the plugin and thus disable New Relic Browser monitoring? =
-No worries - simply re-enable the plugin, indicate you have an existing New Relic account, and provide [your API Key](https://docs.newrelic.com/docs/apm/apis/requirements/api-key#creating).
+= Why is this plugin being retired? =
+The New Relic PHP Agent now includes built-in support for browser monitoring, eliminating the need for a separate WordPress plugin. This ensures more efficient and reliable performance tracking at the server level.
 
-= Something is not working - what do I do? =
-Sorry about that! Please open a [Github Issue](https://github.com/rtCamp/rt-newrelic-browser/issues) or post to this plugin’s [Support section](https://wordpress.org/support/plugin/rt-newrelic-browser).
+= How can I continue to use New Relic Browser monitoring? =
+To continue using New Relic Browser monitoring:
+1. Configure the New Relic PHP Agent on your server.
+2. Follow the official [New Relic Browser monitoring setup guide](https://docs.newrelic.com/docs/browser/new-relic-browser/getting-started/introduction-browser-monitoring/).
 
-= Do I have to pay to use New Relic? =
-Nope! New Relic’s services, including [Browser monitoring](http://newrelic.com/browser-monitoring), [APM for your WordPress PHP app](http://newrelic.com/php/wordpress) (and [many other languages](http://newrelic.com/application-monitoring)), [Server monitoring](http://newrelic.com/server-monitoring), [Synthetic monitoring](http://newrelic.com/synthetics), and even [Plugins for your entire stack](http://newrelic.com/platform/), are all available in ‘Lite’ versions for free forever!
+= What happens if I keep using this plugin? =
+The plugin will no longer receive updates or support. While it may still function temporarily, future changes to WordPress or New Relic may cause compatibility issues.
 
+= Where can I find help for configuring the New Relic PHP Agent? =
+You can refer to the official [New Relic PHP Agent documentation](https://docs.newrelic.com/docs/agents/php-agent/) or contact New Relic support for assistance.
 
 == Screenshots ==
 
@@ -87,3 +86,6 @@ Nope! New Relic’s services, including [Browser monitoring](http://newrelic.com
 
 = 1.0.5 =
 * Updated API Key Location in description.
+
+= 1.0.6 =
+* Deprecation notice added.
