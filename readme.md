@@ -2,7 +2,7 @@
 
 # New Relic Browser by rtCamp #
 
-* **Contributors:** [rtcamp] (http://profiles.wordpress.org/rtcamp), [newrelic] (http://profiles.wordpress.org/newrelic), [prasad-nevase] (http://profiles.wordpress.org/prasad-nevase), [rakshit] (http://profiles.wordpress.org/rakshit), [rohanveer] (http://profiles.wordpress.org/rohanveer), [brennenlb] (http://profiles.wordpress.org/brennenlb)
+* **Contributors:** [rtcamp] (http://profiles.wordpress.org/rtcamp), [newrelic] (http://profiles.wordpress.org/newrelic), [prasad-nevase] (http://profiles.wordpress.org/prasad-nevase), [rakshit] (http://profiles.wordpress.org/rakshit), [rohanveer] (http://profiles.wordpress.org/rohanveer), [brennenlb] (http://profiles.wordpress.org/brennenlb), [snehapatil02] (https://profiles.wordpress.org/snehapatil02/)
 
 * **License:** [GPL v2 or later] ( http://opensource.org/licenses/mit-license.html)
 

@@ -1,5 +1,5 @@
 === New Relic Browser by rtCamp ===
-Contributors: rtcamp,newrelic,prasad-nevase,rakshit,rohanveer,brennenlb
+Contributors: rtcamp,newrelic,prasad-nevase,rakshit,rohanveer,brennenlb,snehapatil02
 Donate Link:  http://rtcamp.com/donate
 Tags: new relic browser for wordpress, new relic wordpress, new relic wordpress analytics, new relic wordpress multisite, new relic wordpress mu, javascript monitoring, javascript errors, browser monitoring
 Requires at least: 3.0.1
