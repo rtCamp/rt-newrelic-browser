@@ -363,7 +363,11 @@ if ( ! class_exists( 'Rt_Newrelic' ) ) {
 							$create_browser_response_code = wp_remote_retrieve_response_code( $create_browser_response );
 							$json_data = json_decode( $create_browser_response['body'] );
 							if ( 201 != $create_browser_response_code ) {
-								add_settings_error( 'relic_options', 'relic_options_error', $json_data->error, 'error' );
+								if (isset($json_data->error)) {
+									add_settings_error('relic_options', 'relic_options_error', $json_data->error, 'error');
+								} else {
+									add_settings_error('relic_options', 'relic_options_error', 'Something went wrong', 'error');
+								}
 							} else if ( isset( $json_data->api_key ) ) {
 								/* store the received data */
 								$main_array = array(
